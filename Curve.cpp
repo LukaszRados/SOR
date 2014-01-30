@@ -1,9 +1,12 @@
 #include "Curve.hpp"
 
-Curve::Curve(wxRealPoint a, wxRealPoint b, wxColour color):Shape(), _N(50) {
+Curve::Curve(wxRealPoint a, wxRealPoint b, wxColour color):Shape() {
     _points.push_back(a);
     _points.push_back(b);
     _color = color;
+    
+    _initStart = a;
+    _initEnd = b;
      
     double x, y;
     x = (a.x + b.x) / 2.f;
@@ -14,47 +17,57 @@ Curve::Curve(wxRealPoint a, wxRealPoint b, wxColour color):Shape(), _N(50) {
 void Curve::changeBend(wxRealPoint bend) {
     _bend = bend;
     
-    wxRealPoint p0 = _points[0],
-                p1 = _points[1];
-           
-    double d = sqrt(pow(p1.x - p0.x, 2) + pow(p1.y - p0.y, 2)),  // Odleglosc miedzy p0, p1
-           // ------------------------------------------------------------------
-           A, //  Dane prostej przechodzacej przez p0, p1
-           B, //  Ax + By + C = 0
-           C, //  
-           // ------------------------------------------------------------------
-           D, //  Odleglosc punktu _bend od prostej p0,p1
-           // ------------------------------------------------------------------
-           a, //  Dane paraboli
-           b, //  y = ax^2 + bx + c
-           c, //
-           // ------------------------------------------------------------------
-           dx,
-           rotate;
-           
-    A = (p1.y - p0.y) / (p1.x - p0.x);
-    B = -1;
-    C = p0.y - p0.x * a;
-    D = abs(A * bend.x + B * bend.y + C) / sqrt(A * A + B * B);
+    wxRealPoint p0 = _initStart,
+                p1 = _initEnd,
+                os = circleCenter(p0, p1, _bend),
+                middle;
+                
+    double R = sqrt(pow(p0.x - os.x, 2) + pow(p0.y - os.y, 2)),
+           D = sqrt(pow(p0.x - p1.x, 2) + pow(p0.y - p1.y, 2)),
+           d;
     
-    a = 2;//-4.0 * D / (d * d);
-    b = 0;
-    c = 0;
+    // Ograniczamy promien okregu do 1/2 odleglosci miedzy puntami poczatkowymi
+    middle.x = (p1.x + p0.x) / 2.f;
+    middle.y = (p1.y + p0.y) / 2.f;
+    d = sqrt(pow(middle.x - bend.x, 2) + pow(middle.y - bend.y, 2));
+    if(d > D / 2.f) return;
     
-    dx = d / (double)_N;
+    // Wyznaczamy prosta przechodzaca przez dwa punkty. 
+    // Nalezy uwzglednic sytuacje, w ktorej wybrane punkty tworza prosta pionowa
+    double a, b;
     
-    rotate = atan(a);
-    
+    //if(abs(p1.x - p0.x) < 0.001) a = 999999;
+    a = (p1.y - p0.y) / (p1.x - p0.x);
+    b = p0.y - p0.x * a;    
+
     _points.clear();
     
-    for(int i = 0; i < _N; ++i) {
-        wxRealPoint tmp;
-        double x = -d / 2.f + i * dx;
-        double y = a * x * x + b * x + c;
+    int N = (int)(R / 0.01);
+    
+    for(int i = 0; i < N + 1; ++i) {
+        double x, y, fi;
+        fi = i * M_PI / ((double)N / 2.f);
+        x = R * cos(fi) + os.x;
+        y = R * sin(fi) + os.y;
         
-        tmp.x = x;//x * cos(rotate) + y * sin(rotate);
-        tmp.y = y;//-x * sin(rotate) + y * cos(rotate);
-        
-        _points.push_back(tmp);
+        if(_bend.y < a * _bend.x + b) {
+            // Interesuja nas tylko punkty POD prosta y = ax + b
+            if(y < a * x + b) {
+                _points.push_back(wxRealPoint(x, y));
+            }    
+        }
+        else {
+            // Interesuja nas punkty NAD prosta y = ax + b  
+            if(y > a * x + b) {
+                _points.push_back(wxRealPoint(x, y));    
+            }  
+        } 
     }
+}
+
+wxRealPoint Curve::circleCenter(wxRealPoint p1, wxRealPoint p2, wxRealPoint p3) {
+    wxRealPoint os;
+    os.x = 0.5 * ((p2.x * p2.x * p3.y + p2.y * p2.y * p3.y - p1.x * p1.x * p3.y + p1.x * p1.x * p2.y - p1.y * p1.y * p3.y + p1.y * p1.y * p2.y + p1.y * p3.x * p3.x + p1.y * p3.y * p3.y - p1.y * p2.x * p2.x - p1.y * p2.y * p2.y - p2.y * p3.x * p3.x - p2.y * p3.y * p3.y) / (p1.y * p3.x - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x + p3.y * p2.x + p2.y * p1.x));
+    os.y = 0.5 * ((-p1.x * p3.x * p3.x - p1.x * p3.y * p3.y + p1.x * p2.x * p2.x + p1.x * p2.y * p2.y + p2.x * p3.x * p3.x + p2.x * p3.y * p3.y - p2.x * p2.x * p3.x - p2.y * p2.y * p3.x + p1.x * p1.x * p3.x - p1.x * p1.x * p2.x + p1.y * p1.y * p3.x - p1.y * p1.y * p2.x) / (p1.y * p3.x - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x + p3.y * p2.x + p2.y * p1.x));
+    return os;
 }

@@ -26,13 +26,13 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
-#include <wx/stattext.h>
 #include <wx/colordlg.h>
 #include <wx/filedlg.h>
 #include <wx/menu.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
 #include <wx/scrolbar.h>
+#include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -70,7 +70,6 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxStaticText *WxStaticText1;
 		wxFileDialog *WxOpenFileDialog1;
 		wxColourDialog *WxColourDialog1;
 		wxFileDialog *WxSaveFileDialog1;
@@ -83,6 +82,7 @@ class SOR : public wxFrame
 		wxBoxSizer *WxBoxSizer2;
 		wxPanel *Graph3d;
 		wxStaticBoxSizer *WxStaticBoxSizer2;
+		wxStaticText *WxStaticText1;
 		wxButton *WxButton1;
 		wxPanel *Graph2d;
 		wxStaticBoxSizer *WxStaticBoxSizer1;
@@ -97,7 +97,6 @@ class SOR : public wxFrame
 		enum
 		{
 			////GUI Enum Control ID Start
-			ID_WXSTATICTEXT1 = 1048,
 			ID_MNU_PLIK_1027 = 1027,
 			ID_MNU_NOWY_1040 = 1040,
 			ID_MNU_WCZYTAJ_1042 = 1042,
@@ -122,6 +121,7 @@ class SOR : public wxFrame
 			ID_WXSCROLLBAR2 = 1022,
 			ID_WXSCROLLBAR1 = 1021,
 			ID_GRAPH3D = 1018,
+			ID_WXSTATICTEXT1 = 1048,
 			ID_WXBUTTON1 = 1019,
 			ID_GRAPH2D = 1017,
 			////GUI Enum Control ID End

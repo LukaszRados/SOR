@@ -84,6 +84,9 @@ void SOR::CreateGUIControls()
 	WxButton1 = new wxButton(this, ID_WXBUTTON1, _("Rysuj"), wxPoint(172, 430), wxSize(75, 25), 0, wxDefaultValidator, _("WxButton1"));
 	WxStaticBoxSizer1->Add(WxButton1, 0, wxALIGN_CENTER | wxALL, 5);
 
+	WxStaticText1 = new wxStaticText(this, ID_WXSTATICTEXT1, _("WxStaticText1"), wxPoint(171, 465), wxDefaultSize, 0, _("WxStaticText1"));
+	WxStaticBoxSizer1->Add(WxStaticText1, 0, wxALIGN_CENTER | wxALL, 5);
+
 	wxStaticBox* WxStaticBoxSizer2_StaticBoxObj = new wxStaticBox(this, wxID_ANY, _("Bry³a obrotowa"));
 	WxStaticBoxSizer2 = new wxStaticBoxSizer(WxStaticBoxSizer2_StaticBoxObj, wxVERTICAL);
 	WxBoxSizer1->Add(WxStaticBoxSizer2, 0, wxALIGN_TOP | wxALL, 5);
@@ -157,14 +160,11 @@ void SOR::CreateGUIControls()
 	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
 
-	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	WxColourDialog1 =  new wxColourDialog(this);
 
-	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.*"), wxFD_OPEN);
-
-	WxStaticText1 = new wxStaticText(this, ID_WXSTATICTEXT1, _("WxStaticText1"), wxPoint(70, 463), wxDefaultSize, 0, _("WxStaticText1"));
-	WxStaticBoxSizer1->Add(WxStaticText1, 0, wxALIGN_CENTER | wxALL, 5);
+	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
@@ -526,11 +526,29 @@ void SOR::MouseMove(wxMouseEvent& event)
         
         switch(_mode) {
         case CURVE:
-            
+            if(_currentShape == 0) {
+                dc->DrawLine(last, pointToInt(p));
+            }
+            else {
+                Curve* curve = dynamic_cast<Curve*>(_currentShape);
+                curve->changeBend(p);
+            }
             break;
             
         case RECTANGLE:
-//            dc->DrawRectangle(last.x, last.y, point.x - last.x, point.y - last.y);
+            {
+                double width, height;
+                double xmin, ymin, xmax, ymax;
+                
+                width = abs(point.x - last.x);
+                height = abs(point.y - last.y);
+                
+                xmin = (last.x < point.x ? last.x : point.x);
+                ymin = (last.y < point.y ? last.y : point.y);
+                
+                dc->SetBrush(*wxTRANSPARENT_BRUSH);
+                dc->DrawRectangle(xmin, ymin, width, height);  
+            }
             break;
             
         default:
