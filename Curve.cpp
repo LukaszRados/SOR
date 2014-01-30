@@ -22,9 +22,14 @@ void Curve::changeBend(wxRealPoint bend) {
         
         wxRealPoint p0 = _initStart,
                     p1 = _initEnd,
-                    os = circleCenter(p0, p1, _bend),
+                    os,
                     middle;
                     
+        if(abs(_bend.x - p0.x) < 0.0001) _bend.x += 0.0002;
+        if(abs(_bend.y - p0.y) < 0.0001) _bend.y -= 0.0002;
+        
+        os = circleCenter(p0, p1, _bend);           
+        
         double R = distance(p0, os),
                D = distance(p0, p1),
                d;
@@ -40,8 +45,8 @@ void Curve::changeBend(wxRealPoint bend) {
         // Nalezy uwzglednic sytuacje, w ktorej wybrane punkty tworza prosta pionowa
         double a, b;
         
-        if(abs(p1.x - p0.x) < 0.00001) p1.x += 0.0002;
-        if(abs(p1.y - p0.y) < 0.00001) p0.y += 0.0001;
+        if(abs(p1.x - p0.x) < 0.0001) p1.x += 0.001;
+        if(abs(p1.y - p0.y) < 0.0001) p0.y += 0.001;
         a = (p1.y - p0.y) / (p1.x - p0.x);
         b = p0.y - p0.x * a;    
     
@@ -56,7 +61,7 @@ void Curve::changeBend(wxRealPoint bend) {
             if(_bend.y < a * _bend.x + b) {
                 
                 wxRealPoint c = (p1.x > p0.x ? p0 : p1);
-                double fi0 = c.x - os.x < 0.0001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                double fi0 = 0;//abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
                 
                 fi = i * M_PI / ((double)N / 2.f) + fi0;
                 x = R * cos(fi) + os.x;
@@ -70,7 +75,7 @@ void Curve::changeBend(wxRealPoint bend) {
             else {
                 
                 wxRealPoint c = (p1.x > p0.x ? p1 : p0);
-                double fi0 = c.x - os.x < 0.0001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                double fi0 = 0;//abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
                 
                 fi = i * M_PI / ((double)N / 2.f) + fi0;
                 x = R * cos(fi) + os.x;
