@@ -69,42 +69,39 @@ void SOR::CreateGUIControls()
 	WxStaticBoxSizer1 = new wxStaticBoxSizer(WxStaticBoxSizer1_StaticBoxObj, wxVERTICAL);
 	WxBoxSizer1->Add(WxStaticBoxSizer1, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxALL, 5);
 
-	Graph2d = new wxPanel(this, ID_GRAPH2D, wxPoint(10, 20), wxSize(346, 347));
+	Graph2d = new wxPanel(this, ID_GRAPH2D, wxPoint(10, 20), wxSize(399, 400));
 	Graph2d->SetBackgroundColour(wxColour(_("WHITE")));
 	WxStaticBoxSizer1->Add(Graph2d, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxButton1 = new wxButton(this, ID_WXBUTTON1, _("Rysuj"), wxPoint(150, 377), wxSize(65, 21), 0, wxDefaultValidator, _("WxButton1"));
+	WxButton1 = new wxButton(this, ID_WXBUTTON1, _("Rysuj"), wxPoint(172, 430), wxSize(75, 24), 0, wxDefaultValidator, _("WxButton1"));
 	WxStaticBoxSizer1->Add(WxButton1, 0, wxALIGN_CENTER | wxALL, 5);
-
-	WxStaticText1 = new wxStaticText(this, ID_WXSTATICTEXT1, _("WxStaticText1"), wxPoint(145, 408), wxDefaultSize, 0, _("WxStaticText1"));
-	WxStaticBoxSizer1->Add(WxStaticText1, 0, wxALIGN_CENTER | wxALL, 5);
 
 	wxStaticBox* WxStaticBoxSizer2_StaticBoxObj = new wxStaticBox(this, wxID_ANY, _("Bry³a obrotowa"));
 	WxStaticBoxSizer2 = new wxStaticBoxSizer(WxStaticBoxSizer2_StaticBoxObj, wxVERTICAL);
 	WxBoxSizer1->Add(WxStaticBoxSizer2, 0, wxALIGN_TOP | wxALL, 5);
 
-	Graph3d = new wxPanel(this, ID_GRAPH3D, wxPoint(10, 20), wxSize(346, 347));
+	Graph3d = new wxPanel(this, ID_GRAPH3D, wxPoint(10, 20), wxSize(399, 400));
 	Graph3d->SetBackgroundColour(wxColour(_("WHITE")));
 	WxStaticBoxSizer2->Add(Graph3d, 0, wxALIGN_CENTER | wxALL, 5);
 
 	WxBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	WxStaticBoxSizer2->Add(WxBoxSizer2, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
+	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(121, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
 	WxScrollBar1->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar1, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar2 = new wxScrollBar(this, ID_WXSCROLLBAR2, wxPoint(120, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar2"));
+	WxScrollBar2 = new wxScrollBar(this, ID_WXSCROLLBAR2, wxPoint(136, 5), wxSize(122, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar2"));
 	WxScrollBar2->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar2, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar3 = new wxScrollBar(this, ID_WXSCROLLBAR3, wxPoint(235, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar3"));
+	WxScrollBar3 = new wxScrollBar(this, ID_WXSCROLLBAR3, wxPoint(268, 5), wxSize(121, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar3"));
 	WxScrollBar3->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar3, 0, wxALIGN_CENTER | wxALL, 5);
 
 	WxStatusBar1 = new wxStatusBar(this, ID_WXSTATUSBAR1);
 
-	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(748, 40), wxTB_TEXT | wxTB_NOICONS);
+	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(863, 40), wxTB_TEXT | wxTB_NOICONS);
 
 	wxBitmap WxToolButton7_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton7_DISABLE_BITMAP (wxNullBitmap);
@@ -126,7 +123,9 @@ void SOR::CreateGUIControls()
 	wxBitmap WxToolButton5_DISABLE_BITMAP (wxNullBitmap);
 	WxToolBar1->AddTool(ID_WXTOOLBUTTON5, _("Kolor"), WxToolButton5_BITMAP, WxToolButton5_DISABLE_BITMAP, wxITEM_NORMAL, _("Zmieñ kolor"), _(""));
 
-	WxColourDialog1 =  new wxColourDialog(this);
+	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
 
 	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
 
@@ -159,9 +158,7 @@ void SOR::CreateGUIControls()
 	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
 
-	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-
-	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
+	WxColourDialog1 =  new wxColourDialog(this);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
@@ -247,8 +244,16 @@ void SOR::draw2dGraph() {
     dc->SetDeviceOrigin(size.x / 2, size.y / 2);
     
     dc->SetPen(*wxBLACK_PEN);
+    
+    // Rysujemy osie ukladu XZ
     dc->DrawLine(0, -size.GetHeight() / 2, 0, size.GetHeight() / 2);
-    dc->DrawLine(-size.GetWidth() / 2, 0, size.GetWidth() / 2, 0); 
+    dc->DrawLine(-size.GetWidth() / 2, 0, size.GetWidth() / 2, 0);
+    dc->DrawLine(size.GetWidth() / 2, 0, size.GetWidth() / 2 - 10, -10);
+    dc->DrawLine(size.GetWidth() / 2, 0, size.GetWidth() / 2 - 10, 10);
+    dc->DrawLine(0, -size.GetHeight() / 2, -10, -size.GetHeight() / 2 + 10);
+    dc->DrawLine(0, -size.GetHeight() / 2, 10, -size.GetHeight() / 2 + 10);
+    dc->DrawText("X", size.GetWidth() / 2 - 10, -25);
+    dc->DrawText("Z", 10, -size.GetHeight() / 2 + 2);
     
     int shapes = _shapes.size();
     for(int i = 0; i < shapes; ++i) {
@@ -442,11 +447,7 @@ void SOR::MouseLeftDown(wxMouseEvent& event) {
         case NONE:
         {
             int index = isPartOfAnyShape(p);
-            if(index == -1) {
-                WxStaticText1->SetLabel("Nie jest");    
-            }
-            else {
-                WxStaticText1->SetLabel("Jest");
+            if(index != -1) {
                 delete _shapes[index];
                 _shapes.erase(_shapes.begin() + index);
                 draw2dGraph();
@@ -762,14 +763,14 @@ void SOR::saveFileClick(wxCommandEvent& event) {
                 file << 999999 << std::endl;
                 file << _shapes[i]->getPoints().size() << std::endl;
                 file << _shapes[i]->getClassId() << std::endl;
-                file << _shapes[i]->getColor().GetRGB() << "\n";
+                file << _shapes[i]->getColor().GetRGB() << std::endl;
 
                 for(int j = 0; j < points.size(); ++j) {
                     file << points[j].x * 10000 << " ";
-                    file << points[j].y * 10000 << "\n"; 
+                    file << points[j].y * 10000 << std::endl; 
                 }    
                 
-                file << 999999 << "\n";
+                file << 999999 << std::endl;
             }
             WxStatusBar1->SetStatusText("Plik zosta³ zapisany.");
             file.close();
@@ -836,7 +837,7 @@ void SOR::loadFileClick(wxCommandEvent& event) {
             }
         }
         else {
-            WxStatusBar1->SetStatusText("Nie uda3o sie wczytaa pliku.");
+            WxStatusBar1->SetStatusText("Nie uda³o sie wczytaæ pliku.");
         }   
     }    
 }

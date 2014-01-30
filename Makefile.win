@@ -1,7 +1,7 @@
 # Project: SOR
 # Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 30-01-14 23:06
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 31-01-14 00:07
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe

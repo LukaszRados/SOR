@@ -53,15 +53,15 @@ void Curve::changeBend(wxRealPoint bend) {
         _points.clear();
         
         int N = (int)(R / 0.01);
-        if(N < 5) N = 5;
+        if(N < 10) N = 10;
         
-        for(int i = 0; i < N + 1; ++i) {
+        for(int i = 0; i < N; ++i) {
             double x, y, fi;
             
             if(_bend.y < a * _bend.x + b) {
                 
                 wxRealPoint c = (p1.x > p0.x ? p0 : p1);
-                double fi0 = 0;//abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                double fi0 = abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
                 
                 fi = i * M_PI / ((double)N / 2.f) + fi0;
                 x = R * cos(fi) + os.x;
@@ -75,9 +75,9 @@ void Curve::changeBend(wxRealPoint bend) {
             else {
                 
                 wxRealPoint c = (p1.x > p0.x ? p1 : p0);
-                double fi0 = 0;//abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                double fi0 = abs(c.x - os.x) < 0.001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
                 
-                fi = i * M_PI / ((double)N / 2.f) + fi0;
+                fi = i * M_PI / ((double)N / 2.f) + fi0 + M_PI;
                 x = R * cos(fi) + os.x;
                 y = R * sin(fi) + os.y;
                 

@@ -26,13 +26,12 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
+#include <wx/colordlg.h>
 #include <wx/menu.h>
 #include <wx/filedlg.h>
-#include <wx/colordlg.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
 #include <wx/scrolbar.h>
-#include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -69,11 +68,11 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxFileDialog *WxOpenFileDialog1;
-		wxFileDialog *WxSaveFileDialog1;
+		wxColourDialog *WxColourDialog1;
 		wxMenuBar *WxMenuBar1;
 		wxFileDialog *ExportToBMPDialog;
-		wxColourDialog *WxColourDialog1;
+		wxFileDialog *WxOpenFileDialog1;
+		wxFileDialog *WxSaveFileDialog1;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;
 		wxScrollBar *WxScrollBar3;
@@ -82,7 +81,6 @@ class SOR : public wxFrame
 		wxBoxSizer *WxBoxSizer2;
 		wxPanel *Graph3d;
 		wxStaticBoxSizer *WxStaticBoxSizer2;
-		wxStaticText *WxStaticText1;
 		wxButton *WxButton1;
 		wxPanel *Graph2d;
 		wxStaticBoxSizer *WxStaticBoxSizer1;
@@ -122,7 +120,6 @@ class SOR : public wxFrame
 			ID_WXSCROLLBAR2 = 1022,
 			ID_WXSCROLLBAR1 = 1021,
 			ID_GRAPH3D = 1018,
-			ID_WXSTATICTEXT1 = 1048,
 			ID_WXBUTTON1 = 1019,
 			ID_GRAPH2D = 1017,
 			////GUI Enum Control ID End
@@ -195,7 +192,7 @@ class SOR : public wxFrame
 		 *  Funkcja sprawdza, czy na zadanych wspolrzednych jest jakikolwiek wezel figur.
 		 *
 		 *  @param wxRealPoint Punkt, ktory chcemy sprawdzic.
-		 *  @return wxRealPoint Punkt, ktory pasuje do miejsca.
+		 *  @return int Indeks figury w wektorze, do ktorej nalezy punkt
 		 */
 		int isPartOfAnyShape(wxRealPoint);
 		
