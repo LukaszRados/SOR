@@ -282,9 +282,13 @@ void SOR::draw2dGraph() {
 }
 
 /******************************************************************************/
+    double max(double a, double b)
+    {
+        return (a > b)?a:b;    
+    }
     bool lines_comp(Line3d a, Line3d b)
     {
-    return (a.z1 + a.z0 < b.z1 + b.z0);    
+    return (max(a.z1 , a.z0) < max(b.z1 , b.z0));    
     }
 void SOR::prepare3dGraph() {
     Matrix M;
