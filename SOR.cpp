@@ -107,29 +107,25 @@ void SOR::CreateGUIControls()
 
 	wxBitmap WxToolButton7_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton7_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON7, _("Gumka"), WxToolButton7_BITMAP, WxToolButton7_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON7, _("Gumka"), WxToolButton7_BITMAP, WxToolButton7_DISABLE_BITMAP, wxITEM_NORMAL, _("Kasuj figury"), _(""));
 
 	wxBitmap WxToolButton1_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton1_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON1, _("Linia"), WxToolButton1_BITMAP, WxToolButton1_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON1, _("Linia"), WxToolButton1_BITMAP, WxToolButton1_DISABLE_BITMAP, wxITEM_NORMAL, _("Narysuj odcinek"), _(""));
 
 	wxBitmap WxToolButton2_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton2_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON2, _("Krzywa ³amana"), WxToolButton2_BITMAP, WxToolButton2_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON2, _("Krzywa ³amana"), WxToolButton2_BITMAP, WxToolButton2_DISABLE_BITMAP, wxITEM_NORMAL, _("Narysuj krzyw¹ ³aman¹"), _(""));
 
 	wxBitmap WxToolButton3_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton3_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON3, _("£uk"), WxToolButton3_BITMAP, WxToolButton3_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON3, _("£uk"), WxToolButton3_BITMAP, WxToolButton3_DISABLE_BITMAP, wxITEM_NORMAL, _("Narysuj ³uk"), _(""));
 
 	wxBitmap WxToolButton5_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton5_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON5, _("Kolor"), WxToolButton5_BITMAP, WxToolButton5_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
-
-	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON5, _("Kolor"), WxToolButton5_BITMAP, WxToolButton5_DISABLE_BITMAP, wxITEM_NORMAL, _("Zmieñ kolor"), _(""));
 
 	WxColourDialog1 =  new wxColourDialog(this);
-
-	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	WxMenuBar1 = new wxMenuBar();
 	wxMenu *ID_MNU_PLIK_1027_Mnu_Obj = new wxMenu();
@@ -160,7 +156,11 @@ void SOR::CreateGUIControls()
 	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
 
+	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
+
 	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
+
+	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
