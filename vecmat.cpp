@@ -7,20 +7,29 @@ Vector::Vector() {
     data[3] = 1.0;
 }
 
+/******************************************************************************/
+
 void Vector::print() {
     printf("(%2.3lf,%2.3lf,%2.3lf,%2.3lf)\n", data[0], data[1], data[2], data[3]);
 }
+
+/******************************************************************************/
 
 void Vector::set(double d1, double d2, double d3) {
     data[0] = d1; 
     data[1] = d2; 
     data[2] = d3;
 }
+
+/******************************************************************************/
+
 void Vector::norm() {
     for(int i = 0; i < 4; ++i) {
         data[i] /= data[3];
     }
 }
+
+/******************************************************************************/
 
 void Vector::focus(double d) {
     for(int i = 0; i < 2; ++i) {
@@ -28,17 +37,26 @@ void Vector::focus(double d) {
     }
     data[2] = 0.0;
 }
+
+/******************************************************************************/
+
 double Vector::getX() {
     return data[0];
 }
+
+/******************************************************************************/
 
 double Vector::getY() {
     return data[1];
 }
 
+/******************************************************************************/
+
 double Vector::getZ() {
 	return data[2];
 }
+
+/******************************************************************************/
 
 Matrix::Matrix() {
     data[0][0] = 0.0; data[0][1] = 0.0; data[0][2] = 0.0; data[0][3] = 0.0;
@@ -47,12 +65,16 @@ Matrix::Matrix() {
     data[3][0] = 0.0; data[3][1] = 0.0; data[3][2] = 0.0; data[3][3] = 1.0;
 }
 
+/******************************************************************************/
+
 void Matrix::print() {
     printf("\n|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[0][0], data[0][1], data[0][2], data[0][3]);
     printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[1][0], data[1][1], data[1][2], data[1][3]);
     printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[2][0], data[2][1], data[2][2], data[2][3]);
     printf("|%2.3lf,%2.3lf,%2.3lf,%2.3lf|\n", data[3][0], data[3][1], data[3][2], data[2][3]);
 }
+
+/******************************************************************************/
 
 Matrix Matrix::operator*(const Matrix gMatrix) {
     Matrix tmp;
@@ -68,6 +90,8 @@ Matrix Matrix::operator*(const Matrix gMatrix) {
     return tmp;
 }
 
+/******************************************************************************/
+
 Vector operator*(const Matrix gMatrix, const Vector gVector) {
     Vector tmp;
 
@@ -79,6 +103,8 @@ Vector operator*(const Matrix gMatrix, const Vector gVector) {
     }
     return tmp;
 }
+
+/******************************************************************************/
  
 Matrix scale(double sx, double sy, double sz) {
     Matrix ret;
@@ -87,6 +113,8 @@ Matrix scale(double sx, double sy, double sz) {
     ret.data[2][2] = sz;
     return ret;
 }
+
+/******************************************************************************/
 
 Matrix rotateX(double a) {
     Matrix ret;
@@ -101,6 +129,8 @@ Matrix rotateX(double a) {
     return ret;
 }
 
+/******************************************************************************/
+
 Matrix rotateY(double a) {
     Matrix ret;
     a *= M_PI;
@@ -114,6 +144,8 @@ Matrix rotateY(double a) {
     return ret;
 }
 
+/******************************************************************************/
+
 Matrix rotateZ(double a) {
     Matrix ret;
     a *= M_PI;
@@ -125,6 +157,8 @@ Matrix rotateZ(double a) {
     ret.data[1][1] = cos(a);
     return ret;
 }
+
+/******************************************************************************/
  
 Matrix translation(double x, double y, double z) {
     Matrix ret;
@@ -137,6 +171,8 @@ Matrix translation(double x, double y, double z) {
     ret.data[2][3] = z;
     return ret;
 }
+
+/******************************************************************************/
  
 Matrix depth(double d) {
     Matrix ret;

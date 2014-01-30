@@ -1,8 +1,8 @@
 ///-----------------------------------------------------------------
 ///
 /// @file      SOR.h
-/// @author    Lukasz
-/// Created:   2014-01-28 22:23:42
+/// @author    Pawel Noga, Tadeusz Raczek, Lukasz Rados
+/// Created:   2014-01-11 22:23:42
 /// @section   DESCRIPTION
 ///            SOR class declaration
 ///
@@ -26,9 +26,9 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
+#include <wx/menu.h>
 #include <wx/colordlg.h>
 #include <wx/filedlg.h>
-#include <wx/menu.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
 #include <wx/scrolbar.h>
@@ -47,7 +47,6 @@
 #include "Line.hpp"
 #include "Curve.hpp"
 #include "Chain.hpp"
-#include "Rectangle.hpp"
 #include "Line3d.hpp"
 #include "vecmat.h"
 
@@ -71,9 +70,10 @@ class SOR : public wxFrame
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
 		wxFileDialog *WxOpenFileDialog1;
-		wxColourDialog *WxColourDialog1;
-		wxFileDialog *WxSaveFileDialog1;
 		wxMenuBar *WxMenuBar1;
+		wxFileDialog *WxSaveFileDialog1;
+		wxColourDialog *WxColourDialog1;
+		wxFileDialog *ExportToBMPDialog;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;
 		wxScrollBar *WxScrollBar3;
@@ -107,14 +107,15 @@ class SOR : public wxFrame
 			ID_MNU_POKAZUJPUNKTY_1037 = 1037,
 			ID_MNU_ZAMYKAJKRZYWE_1038 = 1038,
 			ID_MNU_PRZYCI_GAJDOPUNKTU_1039 = 1039,
+			ID_MNU_PERSPEKTYWA_1053 = 1053,
 			ID_MNU_ANIMACJA_1035 = 1035,
 			ID_MNU_POMOC_1036 = 1036,
 			
 			ID_WXTOOLBUTTON5 = 1033,
-			ID_WXTOOLBUTTON4 = 1032,
 			ID_WXTOOLBUTTON3 = 1031,
 			ID_WXTOOLBUTTON2 = 1030,
 			ID_WXTOOLBUTTON1 = 1029,
+			ID_WXTOOLBUTTON7 = 1051,
 			ID_WXTOOLBAR1 = 1026,
 			ID_WXSTATUSBAR1 = 1024,
 			ID_WXSCROLLBAR3 = 1023,
@@ -139,8 +140,7 @@ class SOR : public wxFrame
             NONE,               ///\ Nie rysujemy figury (np. zaznaczamy punkty)
             LINE,               ///\ Rysujemy pojedyncza linie
             CURVE,              ///\ Rysujemy krzywa (luk)
-            CHAIN,              ///\ Rysujemy krzywa lamana
-            RECTANGLE           ///\ Rysujemy prostokat
+            CHAIN               ///\ Rysujemy krzywa lamana
         };
         
         /**
@@ -196,7 +196,7 @@ class SOR : public wxFrame
 		 *  @param wxRealPoint Punkt, ktory chcemy sprawdzic.
 		 *  @return wxRealPoint Punkt, ktory pasuje do miejsca.
 		 */
-		wxRealPoint isPartOfAnyShape(wxRealPoint);
+		int isPartOfAnyShape(wxRealPoint);
 		
 		/**
 		 *  Funkcja sprawdza, czy na zadanych wspolrzednych jest poczatek aktualnie rysowanej krzywej.
@@ -255,10 +255,10 @@ class SOR : public wxFrame
 		void MouseLeftDown(wxMouseEvent& event);
 		void MouseDoubleClick(wxMouseEvent& event);
 		void MouseMove(wxMouseEvent& event);
+		void changeModeToNone(wxCommandEvent& event);
         void changeModeToLine(wxCommandEvent& event);
         void changeModeToCurve(wxCommandEvent& event);
         void changeModeToChain(wxCommandEvent& event);
-		void changeModeToRectangle(wxCommandEvent& event);
 		void changeCurrentColor(wxCommandEvent& event);
 		void toggleStitch(wxCommandEvent& event);
 		void togglePoints(wxCommandEvent& event);
@@ -270,6 +270,7 @@ class SOR : public wxFrame
 		void createNewGraph(wxCommandEvent& event);
 		void createNewGraph0(wxCommandEvent& event);
 		void closeApp(wxCommandEvent& event);
+		void exportToBMP(wxCommandEvent& event);
 		void saveFileClick(wxCommandEvent& event);
 		void loadFileClick(wxCommandEvent& event);
 };

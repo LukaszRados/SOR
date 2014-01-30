@@ -26,6 +26,14 @@ bool Shape::contains(wxRealPoint p) const {
     return false;
 }
 
+/******************************************************************************/
+
 void Shape::addPoint(wxRealPoint p) {
     _points.push_back(p);   
+}
+
+/******************************************************************************/
+
+double Shape::distance(wxRealPoint a, wxRealPoint b) {
+    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));    
 }

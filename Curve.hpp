@@ -1,6 +1,7 @@
 #ifndef _CURVE_HPP_
 #define _CURVE_HPP_
 
+#include <list>
 #include "Shape.hpp"
 
 class Curve : public Shape {

@@ -21,6 +21,7 @@ public:
     virtual bool contains(wxRealPoint p) const;
     virtual void addPoint(wxRealPoint);
     virtual int getClassId() const = 0;
+    static double distance(wxRealPoint a, wxRealPoint b);
 
 protected:
     std::vector<wxRealPoint> _points;

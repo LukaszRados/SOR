@@ -1,13 +1,3 @@
-///-----------------------------------------------------------------
-///
-/// @file      SOR.cpp
-/// @author    Lukasz
-/// Created:   2014-01-28 22:23:42
-/// @section   DESCRIPTION
-///            SOR class implementation
-///
-///------------------------------------------------------------------
-
 #include "SOR.h"
 
 //Do not add custom headers between
@@ -30,15 +20,16 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_MENU(ID_MNU_NOWY_1040, SOR::createNewGraph)
 	EVT_MENU(ID_MNU_WCZYTAJ_1042, SOR::loadFileClick)
 	EVT_MENU(ID_MNU_ZAPISZFIGUR__1043, SOR::saveFileClick)
+	EVT_MENU(ID_MNU_WYEKSPORTUJDOPNG_1044, SOR::exportToBMP)
 	EVT_MENU(ID_MNU_WYJ_CIE_1046, SOR::closeApp)
 	EVT_MENU(ID_MNU_POKAZUJPUNKTY_1037, SOR::togglePoints)
 	EVT_MENU(ID_MNU_ZAMYKAJKRZYWE_1038, SOR::toggleClosing)
 	EVT_MENU(ID_MNU_PRZYCI_GAJDOPUNKTU_1039, SOR::toggleStitch)
 	EVT_MENU(ID_WXTOOLBUTTON5,SOR::changeCurrentColor)
-	EVT_MENU(ID_WXTOOLBUTTON4,SOR::changeModeToRectangle)
 	EVT_MENU(ID_WXTOOLBUTTON3,SOR::changeModeToCurve)
 	EVT_MENU(ID_WXTOOLBUTTON2,SOR::changeModeToChain)
 	EVT_MENU(ID_WXTOOLBUTTON1,SOR::changeModeToLine)
+	EVT_MENU(ID_WXTOOLBUTTON7,SOR::changeModeToNone)
 	
 	EVT_COMMAND_SCROLL(ID_WXSCROLLBAR3,SOR::changeRotateZ)
 	
@@ -112,7 +103,11 @@ void SOR::CreateGUIControls()
 
 	WxStatusBar1 = new wxStatusBar(this, ID_WXSTATUSBAR1);
 
-	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(881, 40), wxTB_TEXT | wxTB_NOICONS);
+	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(863, 40), wxTB_TEXT | wxTB_NOICONS);
+
+	wxBitmap WxToolButton7_BITMAP (wxNullBitmap);
+	wxBitmap WxToolButton7_DISABLE_BITMAP (wxNullBitmap);
+	WxToolBar1->AddTool(ID_WXTOOLBUTTON7, _("Gumka"), WxToolButton7_BITMAP, WxToolButton7_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
 
 	wxBitmap WxToolButton1_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton1_DISABLE_BITMAP (wxNullBitmap);
@@ -126,13 +121,15 @@ void SOR::CreateGUIControls()
 	wxBitmap WxToolButton3_DISABLE_BITMAP (wxNullBitmap);
 	WxToolBar1->AddTool(ID_WXTOOLBUTTON3, _("£uk"), WxToolButton3_BITMAP, WxToolButton3_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
 
-	wxBitmap WxToolButton4_BITMAP (wxNullBitmap);
-	wxBitmap WxToolButton4_DISABLE_BITMAP (wxNullBitmap);
-	WxToolBar1->AddTool(ID_WXTOOLBUTTON4, _("Prostok¹t"), WxToolButton4_BITMAP, WxToolButton4_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
-
 	wxBitmap WxToolButton5_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton5_DISABLE_BITMAP (wxNullBitmap);
 	WxToolBar1->AddTool(ID_WXTOOLBUTTON5, _("Kolor"), WxToolButton5_BITMAP, WxToolButton5_DISABLE_BITMAP, wxITEM_NORMAL, _(""), _(""));
+
+	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
+
+	WxColourDialog1 =  new wxColourDialog(this);
+
+	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	WxMenuBar1 = new wxMenuBar();
 	wxMenu *ID_MNU_PLIK_1027_Mnu_Obj = new wxMenu();
@@ -140,7 +137,7 @@ void SOR::CreateGUIControls()
 	ID_MNU_PLIK_1027_Mnu_Obj->AppendSeparator();
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WCZYTAJ_1042, _("Wczytaj"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_ZAPISZFIGUR__1043, _("Zapisz figurê"), _(""), wxITEM_NORMAL);
-	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WYEKSPORTUJDOPNG_1044, _("Wyeksportuj do PNG"), _(""), wxITEM_NORMAL);
+	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WYEKSPORTUJDOPNG_1044, _("Wyeksportuj do BMP"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->AppendSeparator();
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WYJ_CIE_1046, _("Zamknij"), _(""), wxITEM_NORMAL);
 	WxMenuBar1->Append(ID_MNU_PLIK_1027_Mnu_Obj, _("Plik"));
@@ -152,6 +149,9 @@ void SOR::CreateGUIControls()
 	ID_MNU_EDYCJA_1034_Mnu_Obj->Check(ID_MNU_ZAMYKAJKRZYWE_1038,false);
 	ID_MNU_EDYCJA_1034_Mnu_Obj->Append(ID_MNU_PRZYCI_GAJDOPUNKTU_1039, _("Przyci¹gaj do punktu"), _(""), wxITEM_CHECK);
 	ID_MNU_EDYCJA_1034_Mnu_Obj->Check(ID_MNU_PRZYCI_GAJDOPUNKTU_1039,true);
+	ID_MNU_EDYCJA_1034_Mnu_Obj->AppendSeparator();
+	ID_MNU_EDYCJA_1034_Mnu_Obj->Append(ID_MNU_PERSPEKTYWA_1053, _("Perspektywa"), _(""), wxITEM_CHECK);
+	ID_MNU_EDYCJA_1034_Mnu_Obj->Check(ID_MNU_PERSPEKTYWA_1053,false);
 	WxMenuBar1->Append(ID_MNU_EDYCJA_1034_Mnu_Obj, _("Edycja"));
 	
 	wxMenu *ID_MNU_ANIMACJA_1035_Mnu_Obj = new wxMenu();
@@ -159,10 +159,6 @@ void SOR::CreateGUIControls()
 	wxMenu *ID_MNU_POMOC_1036_Mnu_Obj = new wxMenu();
 	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
-
-	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-
-	WxColourDialog1 =  new wxColourDialog(this);
 
 	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
 
@@ -188,7 +184,7 @@ void SOR::CreateGUIControls()
 	
 	_lastAddedPoint = wxRealPoint(-2, -2);
 	_currentColor = RGB(0, 0, 0);
-	_mode = CHAIN;
+	_mode = NONE;
 	
 	Graph2d->Connect(wxID_ANY,
                      wxEVT_LEFT_DOWN,
@@ -217,21 +213,26 @@ void SOR::CreateGUIControls()
     draw2dGraph();
 }
 
-void SOR::OnClose(wxCloseEvent& event)
-{
+void SOR::OnClose(wxCloseEvent& event) {
     resetShapes();
 	Destroy();
 }
+
+/******************************************************************************/
 
 wxRealPoint SOR::pointToReal(wxPoint point) {
     wxSize size = Graph2d->GetSize();
     return wxRealPoint(point.x / (double)(2 * size.GetWidth()), point.y / (double)(2 * size.GetHeight()));
 }
 
+/******************************************************************************/
+
 wxPoint SOR::pointToInt(wxRealPoint point) {
     wxSize size = Graph2d->GetSize();
     return wxPoint(point.x * size.GetWidth() / 2, point.y * size.GetHeight() / 2);
 }
+
+/******************************************************************************/
 
 void SOR::draw2dGraph() {
     wxSize size = Graph2d->GetSize();
@@ -278,6 +279,8 @@ void SOR::draw2dGraph() {
 
     delete dc; 
 }
+
+/******************************************************************************/
 
 void SOR::prepare3dGraph() {
     Matrix M;
@@ -340,6 +343,8 @@ void SOR::prepare3dGraph() {
     }
 }
 
+/******************************************************************************/
+
 void SOR::draw3dGraph() {
     wxClientDC dc1(Graph3d);
     wxBufferedDC dc(&dc1); 
@@ -370,6 +375,8 @@ void SOR::draw3dGraph() {
     }   
 }
 
+/******************************************************************************/
+
 void SOR::resetShapes() {
     _currentShape = 0;
     
@@ -382,11 +389,9 @@ void SOR::resetShapes() {
     _lines3d.clear();
 }
 
-/*
- * SolidOfRevolutionFrmLeftDown
- */
-void SOR::MouseLeftDown(wxMouseEvent& event)
-{
+/******************************************************************************/
+
+void SOR::MouseLeftDown(wxMouseEvent& event) {
     wxClientDC one(Graph2d);
     wxPoint point = event.GetLogicalPosition(one);
     
@@ -397,13 +402,24 @@ void SOR::MouseLeftDown(wxMouseEvent& event)
     
     if(p.x < -1 || p.x > 1 || p.y < -1 || p.y > 1) return;
  
-	if(_lastAddedPoint.x < -1 || _lastAddedPoint == p) {
+	if((_lastAddedPoint.x < -1 || _lastAddedPoint == p) && _mode != NONE) {
         _lastAddedPoint = p;
     }
     else {
         switch(_mode) {
         case NONE:
-            
+        {
+            int index = isPartOfAnyShape(p);
+            if(index == -1) {
+                WxStaticText1->SetLabel("Nie jest");    
+            }
+            else {
+                WxStaticText1->SetLabel("Jest");
+                delete _shapes[index];
+                _shapes.erase(_shapes.begin() + index);
+                draw2dGraph();
+            }
+        }
             break;
         
         case LINE:
@@ -421,9 +437,6 @@ void SOR::MouseLeftDown(wxMouseEvent& event)
 
                 if(currentCurve != 0) {
                     currentCurve->changeBend(p);
-                    wxString a;
-                    a << p.x << " " << p.y;
-                    WxStaticText1->SetLabel(a);
                 }
                 
                 _currentShape = 0;
@@ -452,11 +465,6 @@ void SOR::MouseLeftDown(wxMouseEvent& event)
             }
             
             break;
-            
-        case RECTANGLE:
-            //_shapes.push_back(new Rectangle(_lastAddedPoint, p, _currentColor));
-            _lastAddedPoint.x = -2;
-            break;
         }
 
         if(_currentShape != 0 && _mode != CHAIN && _mode != CURVE) {
@@ -467,7 +475,9 @@ void SOR::MouseLeftDown(wxMouseEvent& event)
     draw2dGraph();
 }
 
-wxRealPoint SOR::isPartOfAnyShape(wxRealPoint p) {
+/******************************************************************************/
+
+int SOR::isPartOfAnyShape(wxRealPoint p) {
     int shapes = _shapes.size();
     
     for(int i = 0; i < shapes; ++i) {
@@ -475,14 +485,16 @@ wxRealPoint SOR::isPartOfAnyShape(wxRealPoint p) {
         int pi = points.size();
         
         for(int j = 0; j < pi; ++j) {
-            if(sqrt(pow(p.x - points[j].x, 2) + pow(p.y - points[j].y, 2)) < 0.01) {
-                return points[j];  
+            if(Shape::distance(p, points[j]) < 0.05) {
+                return i; 
             }
         }    
     }
     
-    return wxRealPoint(-2, -2);
+    return -1;
 }
+
+/******************************************************************************/
 
 wxRealPoint SOR::isPartOfCurrentShape(wxRealPoint p) {
     if(_currentShape == 0) {
@@ -491,18 +503,16 @@ wxRealPoint SOR::isPartOfCurrentShape(wxRealPoint p) {
 
     wxRealPoint first = _currentShape->getPoints()[0];
     
-    if(pow(p.x - first.x, 2) + pow(p.y - first.y, 2) <= 0.001) {
+    if(Shape::distance(p, first) <= 0.05) {
         return first;
     }
 
     return wxRealPoint(-2, -2);
 }
 
-/*
- * SolidOfRevolutionFrmMouseMotion
- */
-void SOR::MouseMove(wxMouseEvent& event)
-{
+/******************************************************************************/
+
+void SOR::MouseMove(wxMouseEvent& event) {
     wxSize size = Graph2d->GetSize();
     
     draw2dGraph();
@@ -515,14 +525,15 @@ void SOR::MouseMove(wxMouseEvent& event)
     point.x = (point.x * 2 - size.x) * 2;
     point.y = (point.y * 2 - size.y) * 2;
     wxRealPoint p = pointToReal(point);
-
-    if(p.x < -.999 || p.x > 1 || p.y < -1 || p.y > 1 || _lastAddedPoint.x < -.999) {}
+    
+    if((p.x < -.999 || p.x > 1 || p.y < -1 || p.y > 1 || _lastAddedPoint.x < -.999) && _mode != NONE) {}
     else {
         dc->SetDeviceOrigin(size.x / 2, size.y / 2);
         
         wxRealPoint tmp = isPartOfCurrentShape(p);
         wxPoint a = pointToInt(tmp);
         wxPoint last = pointToInt(_lastAddedPoint);
+        int shape = isPartOfAnyShape(p);
         
         switch(_mode) {
         case CURVE:
@@ -535,22 +546,24 @@ void SOR::MouseMove(wxMouseEvent& event)
             }
             break;
             
-        case RECTANGLE:
-            {
-                double width, height;
-                double xmin, ymin, xmax, ymax;
+        case NONE:
+            if(shape > -1) {
+                std::vector<wxRealPoint> points = _shapes[shape]->getPoints();
+                dc->SetPen(*wxRED_PEN);
                 
-                width = abs(point.x - last.x);
-                height = abs(point.y - last.y);
+                for(int i = 0; i < points.size() - 1; ++i) {
+                    wxPoint point = pointToInt(points[i]),
+                            point2 = pointToInt(points[i + 1]);
+                       
+                    dc->DrawLine(point, point2);     
+                    dc->DrawCircle(point.x, point.y, 6);
+                }
                 
-                xmin = (last.x < point.x ? last.x : point.x);
-                ymin = (last.y < point.y ? last.y : point.y);
-                
-                dc->SetBrush(*wxTRANSPARENT_BRUSH);
-                dc->DrawRectangle(xmin, ymin, width, height);  
+                wxPoint point = pointToInt(points[points.size() - 1]);
+                dc->DrawCircle(point.x, point.y, 6);
             }
             break;
-            
+
         default:
             if(tmp.x > -1.5 && tmp.y > -1.5 && _config.stitchPoint) {
                 dc->DrawLine(last, a);
@@ -568,8 +581,9 @@ void SOR::MouseMove(wxMouseEvent& event)
     event.StopPropagation();
 }
 
-void SOR::MouseDoubleClick(wxMouseEvent& event)
-{
+/******************************************************************************/
+
+void SOR::MouseDoubleClick(wxMouseEvent& event) {
 	MouseLeftDown(event);
 	
 	if(_config.closeChain && _mode == CHAIN && _currentShape->getPoints().size() > 2) {
@@ -582,28 +596,33 @@ void SOR::MouseDoubleClick(wxMouseEvent& event)
 	draw2dGraph();
 }
 
-void SOR::changeModeToLine(wxCommandEvent& event)
-{
+/******************************************************************************/
+
+void SOR::changeModeToNone(wxCommandEvent& event) {
+    _mode = NONE;
+}
+
+/******************************************************************************/
+
+void SOR::changeModeToLine(wxCommandEvent& event) {
 	_mode = LINE;
 }
 
-void SOR::changeModeToChain(wxCommandEvent& event)
-{
+/******************************************************************************/
+
+void SOR::changeModeToChain(wxCommandEvent& event) {
 	_mode = CHAIN;
 }
 
-void SOR::changeModeToCurve(wxCommandEvent& event)
-{
+/******************************************************************************/
+
+void SOR::changeModeToCurve(wxCommandEvent& event) {
 	_mode = CURVE;
 }
 
-void SOR::changeModeToRectangle(wxCommandEvent& event) 
-{
-    _mode = RECTANGLE;    
-}
+/******************************************************************************/
 
-void SOR::changeCurrentColor(wxCommandEvent& event) 
-{
+void SOR::changeCurrentColor(wxCommandEvent& event) {
     if(WxColourDialog1->ShowModal() == wxID_OK) {
 	   _currentColor = WxColourDialog1->GetColourData().GetColour();
 	   
@@ -615,36 +634,52 @@ void SOR::changeCurrentColor(wxCommandEvent& event)
     draw2dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::toggleStitch(wxCommandEvent& event) {
     _config.stitchPoint = event.IsChecked();
     draw2dGraph();
 }
+
+/******************************************************************************/
 
 void SOR::togglePoints(wxCommandEvent& event) {
     _config.showPoints = event.IsChecked();
     draw2dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::toggleClosing(wxCommandEvent& event) {
     _config.closeChain = event.IsChecked();
     draw2dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::repaint3d(wxCommandEvent& event){
 	draw3dGraph();
 }
+
+/******************************************************************************/
 
 void SOR::changeRotateX(wxScrollEvent& event) {
     draw3dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::changeRotateY(wxScrollEvent& event) {
     draw3dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::changeRotateZ(wxScrollEvent& event) {
     draw3dGraph();
 }
+
+/******************************************************************************/
 
 void SOR::createNewGraph(wxCommandEvent& event) {
     resetShapes();
@@ -653,10 +688,29 @@ void SOR::createNewGraph(wxCommandEvent& event) {
     draw3dGraph();
 }
 
+/******************************************************************************/
+
 void SOR::closeApp(wxCommandEvent& event) {
 	resetShapes();
 	Destroy();
 }
+
+/******************************************************************************/
+
+void SOR::exportToBMP(wxCommandEvent& event) {
+    if(ExportToBMPDialog->ShowModal() == wxID_OK) {
+        wxClientDC dc(Graph3d);
+        wxBitmap image = dc.GetAsBitmap();
+        wxString filename = ExportToBMPDialog->GetPath();
+        
+        image.SaveFile(filename, wxBITMAP_TYPE_BMP);
+    }
+    else {
+        WxStatusBar1->SetStatusText("Nie uda³o sie zapisaæ pliku.");
+    }
+}
+
+/******************************************************************************/
 
 void SOR::saveFileClick(wxCommandEvent& event) {
 	if(WxSaveFileDialog1->ShowModal() == wxID_OK) {
@@ -688,6 +742,8 @@ void SOR::saveFileClick(wxCommandEvent& event) {
     }
 }
 
+/******************************************************************************/
+
 void SOR::loadFileClick(wxCommandEvent& event) {
     if(WxOpenFileDialog1->ShowModal() == wxID_OK) {
         std::ifstream file(WxOpenFileDialog1->GetPath().ToAscii());
@@ -718,10 +774,6 @@ void SOR::loadFileClick(wxCommandEvent& event) {
                     
                 case 3:
                     current = new Chain();
-                    break;
-                    
-                case 4:
-//                    current = new Rectangle();
                     break;
                     
                 default:

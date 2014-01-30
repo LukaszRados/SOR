@@ -14,60 +14,85 @@ Curve::Curve(wxRealPoint a, wxRealPoint b, wxColour color):Shape() {
     _bend = wxRealPoint(x, y);
 }
 
-void Curve::changeBend(wxRealPoint bend) {
-    _bend = bend;
-    
-    wxRealPoint p0 = _initStart,
-                p1 = _initEnd,
-                os = circleCenter(p0, p1, _bend),
-                middle;
-                
-    double R = sqrt(pow(p0.x - os.x, 2) + pow(p0.y - os.y, 2)),
-           D = sqrt(pow(p0.x - p1.x, 2) + pow(p0.y - p1.y, 2)),
-           d;
-    
-    // Ograniczamy promien okregu do 1/2 odleglosci miedzy puntami poczatkowymi
-    middle.x = (p1.x + p0.x) / 2.f;
-    middle.y = (p1.y + p0.y) / 2.f;
-    d = sqrt(pow(middle.x - bend.x, 2) + pow(middle.y - bend.y, 2));
-    if(d > D / 2.f) return;
-    
-    // Wyznaczamy prosta przechodzaca przez dwa punkty. 
-    // Nalezy uwzglednic sytuacje, w ktorej wybrane punkty tworza prosta pionowa
-    double a, b;
-    
-    //if(abs(p1.x - p0.x) < 0.001) a = 999999;
-    a = (p1.y - p0.y) / (p1.x - p0.x);
-    b = p0.y - p0.x * a;    
+/******************************************************************************/
 
-    _points.clear();
-    
-    int N = (int)(R / 0.01);
-    
-    for(int i = 0; i < N + 1; ++i) {
-        double x, y, fi;
-        fi = i * M_PI / ((double)N / 2.f);
-        x = R * cos(fi) + os.x;
-        y = R * sin(fi) + os.y;
+void Curve::changeBend(wxRealPoint bend) {
+    try {
+        _bend = bend;
         
-        if(_bend.y < a * _bend.x + b) {
-            // Interesuja nas tylko punkty POD prosta y = ax + b
-            if(y < a * x + b) {
-                _points.push_back(wxRealPoint(x, y));
-            }    
+        wxRealPoint p0 = _initStart,
+                    p1 = _initEnd,
+                    os = circleCenter(p0, p1, _bend),
+                    middle;
+                    
+        double R = distance(p0, os),
+               D = distance(p0, p1),
+               d;
+        
+        // Ograniczamy promien okregu do 1/2 odleglosci miedzy puntami poczatkowymi
+        middle.x = (p1.x + p0.x) / 2.f;
+        middle.y = (p1.y + p0.y) / 2.f;
+        d = distance(middle, bend);
+        if(d > D / 2.f) return;
+        if(os.x < -900) return;
+        
+        // Wyznaczamy prosta przechodzaca przez dwa punkty. 
+        // Nalezy uwzglednic sytuacje, w ktorej wybrane punkty tworza prosta pionowa
+        double a, b;
+        
+        if(abs(p1.x - p0.x) < 0.00001) p1.x += 0.0002;
+        if(abs(p1.y - p0.y) < 0.00001) p0.y += 0.0001;
+        a = (p1.y - p0.y) / (p1.x - p0.x);
+        b = p0.y - p0.x * a;    
+    
+        _points.clear();
+        
+        int N = (int)(R / 0.01);
+        if(N < 5) N = 5;
+        
+        for(int i = 0; i < N + 1; ++i) {
+            double x, y, fi;
+            
+            if(_bend.y < a * _bend.x + b) {
+                
+                wxRealPoint c = (p1.x > p0.x ? p0 : p1);
+                double fi0 = c.x - os.x < 0.0001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                
+                fi = i * M_PI / ((double)N / 2.f) + fi0;
+                x = R * cos(fi) + os.x;
+                y = R * sin(fi) + os.y;
+                
+                // Interesuja nas tylko punkty POD prosta y = ax + b
+                if(y <= a * x + b) {
+                    _points.push_back(wxRealPoint(x, y));
+                }    
+            }
+            else {
+                
+                wxRealPoint c = (p1.x > p0.x ? p1 : p0);
+                double fi0 = c.x - os.x < 0.0001 ? M_PI / 2.f : atan((c.y - os.y) / (c.x - os.x));
+                
+                fi = i * M_PI / ((double)N / 2.f) + fi0;
+                x = R * cos(fi) + os.x;
+                y = R * sin(fi) + os.y;
+                
+                // Interesuja nas punkty NAD prosta y = ax + b  
+                if(y >= a * x + b) {
+                    _points.push_back(wxRealPoint(x, y));    
+                }  
+            } 
         }
-        else {
-            // Interesuja nas punkty NAD prosta y = ax + b  
-            if(y > a * x + b) {
-                _points.push_back(wxRealPoint(x, y));    
-            }  
-        } 
+    }
+    catch(...) {
     }
 }
 
+/******************************************************************************/
+
 wxRealPoint Curve::circleCenter(wxRealPoint p1, wxRealPoint p2, wxRealPoint p3) {
     wxRealPoint os;
-    os.x = 0.5 * ((p2.x * p2.x * p3.y + p2.y * p2.y * p3.y - p1.x * p1.x * p3.y + p1.x * p1.x * p2.y - p1.y * p1.y * p3.y + p1.y * p1.y * p2.y + p1.y * p3.x * p3.x + p1.y * p3.y * p3.y - p1.y * p2.x * p2.x - p1.y * p2.y * p2.y - p2.y * p3.x * p3.x - p2.y * p3.y * p3.y) / (p1.y * p3.x - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x + p3.y * p2.x + p2.y * p1.x));
-    os.y = 0.5 * ((-p1.x * p3.x * p3.x - p1.x * p3.y * p3.y + p1.x * p2.x * p2.x + p1.x * p2.y * p2.y + p2.x * p3.x * p3.x + p2.x * p3.y * p3.y - p2.x * p2.x * p3.x - p2.y * p2.y * p3.x + p1.x * p1.x * p3.x - p1.x * p1.x * p2.x + p1.y * p1.y * p3.x - p1.y * p1.y * p2.x) / (p1.y * p3.x - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x + p3.y * p2.x + p2.y * p1.x));
+    double m = (p1.y * p3.x - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x + p3.y * p2.x + p2.y * p1.x);
+    os.x = 0.5 * ((p2.x * p2.x * p3.y + p2.y * p2.y * p3.y - p1.x * p1.x * p3.y + p1.x * p1.x * p2.y - p1.y * p1.y * p3.y + p1.y * p1.y * p2.y + p1.y * p3.x * p3.x + p1.y * p3.y * p3.y - p1.y * p2.x * p2.x - p1.y * p2.y * p2.y - p2.y * p3.x * p3.x - p2.y * p3.y * p3.y) / m);
+    os.y = 0.5 * ((-p1.x * p3.x * p3.x - p1.x * p3.y * p3.y + p1.x * p2.x * p2.x + p1.x * p2.y * p2.y + p2.x * p3.x * p3.x + p2.x * p3.y * p3.y - p2.x * p2.x * p3.x - p2.y * p2.y * p3.x + p1.x * p1.x * p3.x - p1.x * p1.x * p2.x + p1.y * p1.y * p3.x - p1.y * p1.y * p2.x) / m);
     return os;
 }
