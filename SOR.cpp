@@ -282,14 +282,19 @@ void SOR::draw2dGraph() {
 }
 
 /******************************************************************************/
-    double max(double a, double b)
-    {
-        return (a > b)?a:b;    
-    }
-    bool lines_comp(Line3d a, Line3d b)
-    {
+
+double max(double a, double b) {
+    return (a > b)?a:b;    
+}
+
+/******************************************************************************/
+
+bool lines_comp(Line3d a, Line3d b) {
     return (max(a.z1 , a.z0) < max(b.z1 , b.z0));    
-    }
+}
+  
+/******************************************************************************/  
+    
 void SOR::prepare3dGraph() {
     Matrix M;
     Vector v1, v2, v3, v4;
@@ -819,9 +824,9 @@ void SOR::loadFileClick(wxCommandEvent& event) {
                 current->setColor(c);
                 
                 for(int j = 0; j < pointsSize; ++j) {
-                    int x, y;
+                    double x, y;
                     file >> x >> y;
-                    current->addPoint(wxRealPoint((double)x / 10000.f, (double)y / 10000.f)); 
+                    current->addPoint(wxRealPoint(x / 10000.f, y / 10000.f)); 
                 }
                 
                 _shapes.push_back(current);
@@ -831,7 +836,7 @@ void SOR::loadFileClick(wxCommandEvent& event) {
             }
         }
         else {
-            WxStatusBar1->SetStatusText("Nie uda³o sie wczytaæ pliku.");
+            WxStatusBar1->SetStatusText("Nie uda3o sie wczytaa pliku.");
         }   
     }    
 }
