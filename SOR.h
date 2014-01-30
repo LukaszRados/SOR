@@ -152,6 +152,7 @@ class SOR : public wxFrame
             bool showPoints;    ///\ Czy punkty powinny byc widoczne na wykresie 2d
             bool closeChain;    ///\ Czy domykac krzywe lamane
             bool stitchPoint;   ///\ Czy dociagac aktualnie rysowana linie do punktu poczatkowego
+            bool perspective;    ///\ Czy wyswietlac normalnie czy z perspektywa
         } Config;
 		
 		/**
@@ -273,6 +274,7 @@ class SOR : public wxFrame
 		void exportToBMP(wxCommandEvent& event);
 		void saveFileClick(wxCommandEvent& event);
 		void loadFileClick(wxCommandEvent& event);
+		void SetPerspective(wxCommandEvent& event);
 };
 
 #endif

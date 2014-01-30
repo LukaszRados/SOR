@@ -25,6 +25,7 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_MENU(ID_MNU_POKAZUJPUNKTY_1037, SOR::togglePoints)
 	EVT_MENU(ID_MNU_ZAMYKAJKRZYWE_1038, SOR::toggleClosing)
 	EVT_MENU(ID_MNU_PRZYCI_GAJDOPUNKTU_1039, SOR::toggleStitch)
+	EVT_MENU(ID_MNU_PERSPEKTYWA_1053, SOR::SetPerspective)
 	EVT_MENU(ID_WXTOOLBUTTON5,SOR::changeCurrentColor)
 	EVT_MENU(ID_WXTOOLBUTTON3,SOR::changeModeToCurve)
 	EVT_MENU(ID_WXTOOLBUTTON2,SOR::changeModeToChain)
@@ -89,7 +90,7 @@ void SOR::CreateGUIControls()
 	WxBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	WxStaticBoxSizer2->Add(WxBoxSizer2, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(6, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
+	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
 	WxScrollBar1->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar1, 0, wxALIGN_CENTER | wxALL, 5);
 
@@ -302,7 +303,7 @@ void SOR::prepare3dGraph() {
             for(int k = 0; k < 72; ++k) {
                 v3 = M * v1;
                 v4 = M * v2;
-                
+
                 Line3d line1 = {
                     v1.getX(),
                     v1.getY(),
@@ -381,8 +382,16 @@ void SOR::draw3dGraph() {
     }
     std::sort(_lines3d.begin(), _lines3d.end(),lines_comp);
     for(int i = 0; i < _lines3d.size(); ++i){
+        
         v1.set(_lines3d[i].x0, _lines3d[i].y0, _lines3d[i].z0);    
         v2.set(_lines3d[i].x1, _lines3d[i].y1, _lines3d[i].z1);
+                if (_config.perspective)
+                {
+                    v1 = translation(0,0,0.5) * v1;
+                    v2 = translation(0,0,0.5) * v2;
+                    v1.focus(2.0);
+                    v2.focus(2.0);   
+                }
         dc.SetPen(_lines3d[i].color);
         dc.DrawLine(v1.getX() * w/2, -v1.getY() * h/2, v2.getX() * w/2, -v2.getY() * h/2);
     }   
@@ -821,4 +830,13 @@ void SOR::loadFileClick(wxCommandEvent& event) {
             WxStatusBar1->SetStatusText("Nie uda³o sie wczytaæ pliku.");
         }   
     }    
+}
+
+/*
+ * SetPerspective
+ */
+void SOR::SetPerspective(wxCommandEvent& event)
+{
+	_config.perspective = event.IsChecked();
+	draw3dGraph();
 }
