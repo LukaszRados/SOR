@@ -26,8 +26,8 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
-#include <wx/filedlg.h>
 #include <wx/menu.h>
+#include <wx/filedlg.h>
 #include <wx/colordlg.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
@@ -42,7 +42,7 @@
 #include <string>
 #include <fstream>
 #include <wx/dcbuffer.h>
-
+#include <algorithm>
 #include "Shape.hpp"
 #include "Line.hpp"
 #include "Curve.hpp"
@@ -69,10 +69,10 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxFileDialog *WxSaveFileDialog1;
 		wxFileDialog *WxOpenFileDialog1;
-		wxFileDialog *ExportToBMPDialog;
+		wxFileDialog *WxSaveFileDialog1;
 		wxMenuBar *WxMenuBar1;
+		wxFileDialog *ExportToBMPDialog;
 		wxColourDialog *WxColourDialog1;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;

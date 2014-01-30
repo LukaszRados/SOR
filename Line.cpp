@@ -5,3 +5,4 @@ Line::Line(wxRealPoint a, wxRealPoint b, wxColour color) {
     _points.push_back(b);    
     _color = color;
 }
+

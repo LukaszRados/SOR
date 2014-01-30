@@ -214,26 +214,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit18]
-FileName=vecmat.cpp
-CompileCpp=1
-Folder=SOR
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit19]
-FileName=vecmat.h
-CompileCpp=1
-Folder=SOR
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit7]
 FileName=Chain.cpp
 CompileCpp=1
