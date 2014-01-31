@@ -205,7 +205,7 @@ void SOR::CreateGUIControls()
 	WxScrollBar2->Enable(true);
 	WxScrollBar3->SetScrollbar(0, 1, 361, 1,true);
 	WxScrollBar3->Enable(true);
-	wxInitAllImageHandlers ();
+	wxInitAllImageHandlers();
 	_lastAddedPoint = wxRealPoint(-2, -2);
 	_currentColor = RGB(0, 0, 0);
 	_mode = NONE;
@@ -251,6 +251,8 @@ void SOR::CreateGUIControls()
     _animationSettings->z1 = 360;
     draw2dGraph();
 }
+
+/******************************************************************************/
 
 void SOR::OnClose(wxCloseEvent& event) {
     resetShapes();
@@ -417,7 +419,7 @@ void SOR::prepare3dGraph() {
                 }    
                 
                 
-            } /// end of for k[0;5]
+            } /// end of for k[0;K]
         }
     }
 }
@@ -730,9 +732,9 @@ void SOR::repaint3d(wxCommandEvent& event){
             WxTimer1->Stop();    
         }
         else {
-            ax = _animationSettings->x0;
-            ay = _animationSettings->y0;
-            az = _animationSettings->z0;
+            double ax = _animationSettings->x0,
+                   ay = _animationSettings->y0,
+                   az = _animationSettings->z0;
             
             WxScrollBar1->SetThumbPosition(ax);
             WxScrollBar2->SetThumbPosition(ay);
@@ -908,7 +910,8 @@ void SOR::loadFileClick(wxCommandEvent& event) {
                     break;
                     
                 default:
-                    // Obsluga bledow
+                    WxStatusBar1->SetStatusText("B³¹d parsowania pliku.");
+                    return;
                     break;    
                 }
                 
@@ -934,23 +937,22 @@ void SOR::loadFileClick(wxCommandEvent& event) {
     }    
 }
 
-/*
- * SetPerspective
- */
-void SOR::SetPerspective(wxCommandEvent& event)
-{
+/******************************************************************************/
+
+void SOR::SetPerspective(wxCommandEvent& event) {
 	_config.perspective = event.IsChecked();
 	draw3dGraph();
 }
 
-/*
- * Animate
- */
+/******************************************************************************/
+
 void SOR::Animate(wxCommandEvent& event) {
     SettingsFrame* settings = new SettingsFrame(this);
     settings->Show(true);
     settings->setValues(_animationSettings);
 }
+
+/******************************************************************************/
 
 void SOR::drawOn(wxBufferedDC &dc, int w, int h, int rX,int rY,int rZ) {
     Vector v1, v2;
@@ -988,22 +990,16 @@ void SOR::drawOn(wxBufferedDC &dc, int w, int h, int rX,int rY,int rZ) {
     }
 }
 
-/*
- * halfRotate
- */
-void SOR::halfRotate(wxCommandEvent& event)
-{
+/******************************************************************************/
+
+void SOR::halfRotate(wxCommandEvent& event) {
 	_config.half = event.IsChecked();
 	draw3dGraph();
 }
 
-/*
- * print
- */
-void SOR::print(wxCommandEvent& event)
-{
-    // save the display before it is clobbered by the print preview
+/******************************************************************************/
 
+void SOR::print(wxCommandEvent& event) {
     static wxMemoryDC memDC;
     static wxBitmap bitmap(Graph3d->GetSize().GetWidth() , Graph3d->GetSize().GetHeight());
     memDC.SelectObject( bitmap );
@@ -1014,8 +1010,9 @@ void SOR::print(wxCommandEvent& event)
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
-
 }
+
+/******************************************************************************/
 
 void SOR::WxTimer1Timer(wxTimerEvent& event) {
 	if(_currentFrame > 180 || _shapes.size() <= 0) {
@@ -1037,9 +1034,13 @@ void SOR::WxTimer1Timer(wxTimerEvent& event) {
     }
 }
 
+/******************************************************************************/
+
 void SOR::createAnimation(wxCommandEvent& event) {
 	_config.animation = event.IsChecked();
 }
+
+/******************************************************************************/
 
 void SOR::about(wxCommandEvent& event) {
     aboutApp->SetMessage("Autorzy programu:\n- Pawe³ Noga\n- Tadeusz Raczek\n- £ukasz Rados");

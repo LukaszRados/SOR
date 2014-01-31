@@ -267,8 +267,6 @@ class SOR : public wxFrame
 		 */
 		Line3d* _animationSettings;
 		
-		double ax, ay, az;
-		
 		/**
 		 *  Ponizej znajduja sie metody, ktore wyzwalane sa w momencie wystapienia odpowiednich zdarzen.
 		 */

@@ -9,7 +9,6 @@ typedef struct Line3d {
     double y1;
     double z1;
     wxColour color;
-
 } Line3d;
 
 #endif

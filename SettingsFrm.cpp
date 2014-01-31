@@ -150,9 +150,13 @@ void SettingsFrame::CreateGUIControls()
 	SetBackgroundColour(*wxWHITE);
 }
 
+/******************************************************************************/
+
 void SettingsFrame::OnClose(wxCloseEvent& event) {
 	Destroy();
 }
+
+/******************************************************************************/
 
 void SettingsFrame::setValues(Line3d *org) {
     _org = org;
@@ -166,6 +170,8 @@ void SettingsFrame::setValues(Line3d *org) {
     }    
 }
 
+/******************************************************************************/
+
 void SettingsFrame::WxButton1Click(wxCommandEvent& event) {
     if(_org != 0) {
         _org->x0 = WxScrollBar1->GetThumbPosition();
@@ -176,8 +182,4 @@ void SettingsFrame::WxButton1Click(wxCommandEvent& event) {
         _org->z1 = WxScrollBar6->GetThumbPosition();
     }
 	Destroy();
-}
-
-void SettingsFrame::updateValues(wxScrollEvent& event) {
-    
 }
