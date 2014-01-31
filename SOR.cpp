@@ -439,8 +439,6 @@ void SOR::draw3dGraph() {
     double rY = WxScrollBar2->GetThumbPosition();
     double rZ = WxScrollBar3->GetThumbPosition(); 
     drawOn(dc,w,h,rX,rY,rZ);
-    
-
 }
 
 /******************************************************************************/
