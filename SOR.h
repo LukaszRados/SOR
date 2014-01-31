@@ -26,8 +26,9 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
-#include <wx/filedlg.h>
 #include <wx/colordlg.h>
+#include <wx/timer.h>
+#include <wx/filedlg.h>
 #include <wx/menu.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
@@ -49,6 +50,8 @@
 #include "Line3d.hpp"
 #include "vecmat.h"
 #include "Printout.h"
+#include "SettingsFrm.h"
+
 ////Dialog Style Start
 #undef SOR_STYLE
 #define SOR_STYLE wxCAPTION | wxSYSTEM_MENU | wxMINIMIZE_BOX | wxCLOSE_BOX
@@ -68,10 +71,11 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxFileDialog *WxSaveFileDialog1;
-		wxFileDialog *ExportToBMPDialog;
-		wxFileDialog *WxOpenFileDialog1;
 		wxColourDialog *WxColourDialog1;
+		wxTimer *WxTimer1;
+		wxFileDialog *WxSaveFileDialog1;
+		wxFileDialog *WxOpenFileDialog1;
+		wxFileDialog *ExportToBMPDialog;
 		wxMenuBar *WxMenuBar1;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;
@@ -94,6 +98,7 @@ class SOR : public wxFrame
 		enum
 		{
 			////GUI Enum Control ID Start
+			ID_WXTIMER1 = 1057,
 			ID_MNU_PLIK_1027 = 1027,
 			ID_MNU_NOWY_1040 = 1040,
 			ID_MNU_WCZYTAJ_1042 = 1042,
@@ -108,7 +113,8 @@ class SOR : public wxFrame
 			ID_MNU_PERSPEKTYWA_1053 = 1053,
 			ID_MNU_P__OBR_T_1055 = 1055,
 			ID_MNU_ANIMACJA_1035 = 1035,
-			ID_MNU_POKA__1054 = 1054,
+			ID_MNU_UTW_RZANIMACJ__1059 = 1059,
+			ID_MNU_USTAWIENIA_1062 = 1062,
 			ID_MNU_POMOC_1036 = 1036,
 			
 			ID_WXTOOLBUTTON5 = 1033,
@@ -153,6 +159,7 @@ class SOR : public wxFrame
             bool stitchPoint;   ///\ Czy dociagac aktualnie rysowana linie do punktu poczatkowego
             bool perspective;   ///\ Czy wyswietlac normalnie czy z perspektywa
             bool half;          ///\ Czy wykonywaæ tylko pó³ obrotu
+            bool animation;     ///\ Czy stworzyc animacje
         } Config;
 		
 		/**
@@ -248,6 +255,18 @@ class SOR : public wxFrame
 		Config _config;
 		
 		/**
+		 *  Aktualna klatka animacji.
+		 */
+		int _currentFrame;
+		
+		/**
+		 *  Ustawienia animacji (przechowywane jako wskaznik do obiektu Line3d)
+		 */
+		Line3d* _animationSettings;
+		
+		double ax, ay, az;
+		
+		/**
 		 *  Ponizej znajduja sie metody, ktore wyzwalane sa w momencie wystapienia odpowiednich zdarzen.
 		 */
 		
@@ -279,6 +298,9 @@ class SOR : public wxFrame
 		void drawOn(wxBufferedDC& dc, int w, int h, int rx, int ry, int rz);
 		void halfRotate(wxCommandEvent& event);
 		void print(wxCommandEvent& event);
+		void WxTimer1Timer(wxTimerEvent& event);
+		void SORSize(wxSizeEvent& event);
+		void createAnimation(wxCommandEvent& event);
 };
 
 #endif

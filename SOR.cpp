@@ -17,6 +17,7 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	////Manual Code End
 	
 	EVT_CLOSE(SOR::OnClose)
+	EVT_TIMER(ID_WXTIMER1,SOR::WxTimer1Timer)
 	EVT_MENU(ID_MNU_NOWY_1040, SOR::createNewGraph)
 	EVT_MENU(ID_MNU_WCZYTAJ_1042, SOR::loadFileClick)
 	EVT_MENU(ID_MNU_DRUKUJ_1056, SOR::print)
@@ -28,7 +29,9 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_MENU(ID_MNU_PRZYCI_GAJDOPUNKTU_1039, SOR::toggleStitch)
 	EVT_MENU(ID_MNU_PERSPEKTYWA_1053, SOR::SetPerspective)
 	EVT_MENU(ID_MNU_P__OBR_T_1055, SOR::halfRotate)
-	EVT_MENU(ID_MNU_POKA__1054, SOR::Animate)
+	EVT_MENU(ID_MNU_UTW_RZANIMACJ__1059, SOR::createAnimation)
+	EVT_MENU(ID_MNU_USTAWIENIA_1062, SOR::Animate)
+	EVT_MENU(ID_MNU_POMOC_1036, SOR::about)
 	EVT_MENU(ID_WXTOOLBUTTON5,SOR::changeCurrentColor)
 	EVT_MENU(ID_WXTOOLBUTTON3,SOR::changeModeToCurve)
 	EVT_MENU(ID_WXTOOLBUTTON2,SOR::changeModeToChain)
@@ -72,39 +75,39 @@ void SOR::CreateGUIControls()
 	WxStaticBoxSizer1 = new wxStaticBoxSizer(WxStaticBoxSizer1_StaticBoxObj, wxVERTICAL);
 	WxBoxSizer1->Add(WxStaticBoxSizer1, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxEXPAND | wxALL, 5);
 
-	Graph2d = new wxPanel(this, ID_GRAPH2D, wxPoint(10, 20), wxSize(345, 347));
+	Graph2d = new wxPanel(this, ID_GRAPH2D, wxPoint(10, 20), wxSize(398, 400));
 	Graph2d->SetBackgroundColour(wxColour(_("WHITE")));
 	WxStaticBoxSizer1->Add(Graph2d, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxButton1 = new wxButton(this, ID_WXBUTTON1, _("Rysuj"), wxPoint(150, 377), wxSize(65, 20), 0, wxDefaultValidator, _("WxButton1"));
+	WxButton1 = new wxButton(this, ID_WXBUTTON1, _("Rysuj"), wxPoint(171, 430), wxSize(75, 23), 0, wxDefaultValidator, _("WxButton1"));
 	WxStaticBoxSizer1->Add(WxButton1, 0, wxALIGN_CENTER | wxALL, 5);
 
 	wxStaticBox* WxStaticBoxSizer2_StaticBoxObj = new wxStaticBox(this, wxID_ANY, _("Bry³a obrotowa"));
 	WxStaticBoxSizer2 = new wxStaticBoxSizer(WxStaticBoxSizer2_StaticBoxObj, wxVERTICAL);
 	WxBoxSizer1->Add(WxStaticBoxSizer2, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxEXPAND | wxALL, 5);
 
-	Graph3d = new wxPanel(this, ID_GRAPH3D, wxPoint(10, 20), wxSize(345, 347));
+	Graph3d = new wxPanel(this, ID_GRAPH3D, wxPoint(10, 20), wxSize(398, 400));
 	Graph3d->SetBackgroundColour(wxColour(_("WHITE")));
 	WxStaticBoxSizer2->Add(Graph3d, 0, wxALIGN_CENTER | wxALL, 5);
 
 	WxBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	WxStaticBoxSizer2->Add(WxBoxSizer2, 0, wxALIGN_CENTER | wxEXPAND | wxALL, 5);
 
-	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
+	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(121, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
 	WxScrollBar1->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar1, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar2 = new wxScrollBar(this, ID_WXSCROLLBAR2, wxPoint(120, 5), wxSize(106, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar2"));
+	WxScrollBar2 = new wxScrollBar(this, ID_WXSCROLLBAR2, wxPoint(136, 5), wxSize(123, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar2"));
 	WxScrollBar2->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar2, 0, wxALIGN_CENTER | wxALL, 5);
 
-	WxScrollBar3 = new wxScrollBar(this, ID_WXSCROLLBAR3, wxPoint(236, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar3"));
+	WxScrollBar3 = new wxScrollBar(this, ID_WXSCROLLBAR3, wxPoint(269, 5), wxSize(121, 17), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar3"));
 	WxScrollBar3->Enable(false);
 	WxBoxSizer2->Add(WxScrollBar3, 0, wxALIGN_CENTER | wxALL, 5);
 
 	WxStatusBar1 = new wxStatusBar(this, ID_WXSTATUSBAR1);
 
-	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(748, 40), wxTB_TEXT | wxTB_NOICONS);
+	WxToolBar1 = new wxToolBar(this, ID_WXTOOLBAR1, wxPoint(0, 0), wxSize(863, 40), wxTB_TEXT | wxTB_NOICONS);
 
 	wxBitmap WxToolButton7_BITMAP (wxNullBitmap);
 	wxBitmap WxToolButton7_DISABLE_BITMAP (wxNullBitmap);
@@ -153,20 +156,26 @@ void SOR::CreateGUIControls()
 	WxMenuBar1->Append(ID_MNU_EDYCJA_1034_Mnu_Obj, _("Edycja"));
 	
 	wxMenu *ID_MNU_ANIMACJA_1035_Mnu_Obj = new wxMenu();
-	ID_MNU_ANIMACJA_1035_Mnu_Obj->Append(ID_MNU_POKA__1054, _("Poka¿"), _(""), wxITEM_NORMAL);
+	ID_MNU_ANIMACJA_1035_Mnu_Obj->Append(ID_MNU_UTW_RZANIMACJ__1059, _("Utwórz animacjê"), _(""), wxITEM_CHECK);
+	ID_MNU_ANIMACJA_1035_Mnu_Obj->Check(ID_MNU_UTW_RZANIMACJ__1059,false);
+	ID_MNU_ANIMACJA_1035_Mnu_Obj->AppendSeparator();
+	ID_MNU_ANIMACJA_1035_Mnu_Obj->Append(ID_MNU_USTAWIENIA_1062, _("Ustawienia"), _(""), wxITEM_NORMAL);
 	WxMenuBar1->Append(ID_MNU_ANIMACJA_1035_Mnu_Obj, _("Animacja"));
 	
 	wxMenu *ID_MNU_POMOC_1036_Mnu_Obj = new wxMenu();
-	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
+	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("O programie"));
 	SetMenuBar(WxMenuBar1);
-
-	WxColourDialog1 =  new wxColourDialog(this);
-
-	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
 
 	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
 
+	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
+
 	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+	WxTimer1 = new wxTimer();
+	WxTimer1->SetOwner(this, ID_WXTIMER1);
+
+	WxColourDialog1 =  new wxColourDialog(this);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
@@ -213,14 +222,30 @@ void SOR::CreateGUIControls()
     _config = {
         true,               ///\ Czy pokazywac punkty  
         false,              ///\ Czy dorysowywac linie miedzy ostatnim a pierwszym punktem
-        true                ///\ Czy przyciagac kursor w poblizu punktu
+        true,               ///\ Czy przyciagac kursor w poblizu punktu
+        false,
+        false,
+        false
     };
     
+    _currentFrame = 0;
+    _animationSettings = new Line3d();
+    _animationSettings->x0 = 0;
+    _animationSettings->x1 = 360;
+    
+    _animationSettings->y0 = 0;
+    _animationSettings->y1 = 360;
+    
+    _animationSettings->z0 = 0;
+    _animationSettings->z1 = 360;
     draw2dGraph();
 }
 
 void SOR::OnClose(wxCloseEvent& event) {
     resetShapes();
+    if(_animationSettings != 0) {
+        delete _animationSettings;    
+    }
 	Destroy();
 }
 
@@ -419,6 +444,7 @@ void SOR::resetShapes() {
     
     _shapes.clear();
     _lines3d.clear();
+    WxTimer1->Stop(); 
 }
 
 /******************************************************************************/
@@ -690,6 +716,26 @@ void SOR::repaint3d(wxCommandEvent& event){
     WxScrollBar2->SetThumbPosition(0);
     WxScrollBar3->SetThumbPosition(0);
     
+    if(_config.animation && _shapes.size() > 0) {
+        if(WxTimer1->IsRunning()) {
+            WxTimer1->Stop();    
+        }
+        else {
+            ax = _animationSettings->x0;
+            ay = _animationSettings->y0;
+            az = _animationSettings->z0;
+            
+            WxScrollBar1->SetThumbPosition(ax);
+            WxScrollBar2->SetThumbPosition(ay);
+            WxScrollBar3->SetThumbPosition(az);
+            
+            WxTimer1->Start();
+        }
+    }
+    else {
+        WxTimer1->Stop();
+    }
+    
 	draw3dGraph();
 }
 
@@ -891,29 +937,14 @@ void SOR::SetPerspective(wxCommandEvent& event)
 /*
  * Animate
  */
-void SOR::Animate(wxCommandEvent& event)
-{
-    WxScrollBar1->Disable();
-    WxScrollBar2->Disable();
-    WxScrollBar3->Disable();
-    for(int i = 0; i < 360; ++i)
-    {
-        WxScrollBar1->SetThumbPosition(i);
-        WxScrollBar2->SetThumbPosition(i);
-        WxScrollBar3->SetThumbPosition(i);
-        draw3dGraph();
-        wxThread::This()->Sleep(1);
-        //if (!event.IsChecked()) break;
-    }
-    WxScrollBar1->Enable();
-    WxScrollBar2->Enable();
-    WxScrollBar3->Enable();
+void SOR::Animate(wxCommandEvent& event) {
+    SettingsFrame* settings = new SettingsFrame(this);
+    settings->Show(true);
+    settings->setValues(_animationSettings);
 }
-void SOR::drawOn(wxBufferedDC &dc, int w, int h, int rX,int rY,int rZ)
-{
 
+void SOR::drawOn(wxBufferedDC &dc, int w, int h, int rX,int rY,int rZ) {
     Vector v1, v2;
-
     
     prepare3dGraph();
     
@@ -975,4 +1006,32 @@ void SOR::print(wxCommandEvent& event)
     frame->Initialize();
     frame->Show(true);
 
+}
+
+void SOR::WxTimer1Timer(wxTimerEvent& event) {
+	if(_currentFrame > 180 || _shapes.size() <= 0) {
+        _currentFrame = 0;
+        WxTimer1->Stop();   
+    }
+    else {
+        Line3d tmp = *_animationSettings;
+        double dx, dy, dz;
+        dx = (tmp.x1 - tmp.x0) / 180;
+        dy = (tmp.y1 - tmp.y0) / 180;
+        dz = (tmp.z1 - tmp.z0) / 180;
+        
+        WxScrollBar1->SetThumbPosition((int)(_currentFrame * dx + tmp.x0));
+        WxScrollBar2->SetThumbPosition((int)(_currentFrame * dy + tmp.y0));
+        WxScrollBar3->SetThumbPosition((int)(_currentFrame * dz + tmp.z0));
+        draw3dGraph();
+        ++_currentFrame;
+    }
+}
+
+void SOR::createAnimation(wxCommandEvent& event) {
+	_config.animation = event.IsChecked();
+}
+
+void SOR::about(wxCommandEvent& event) {
+	
 }

@@ -86,7 +86,7 @@ ProductName=
 ProductVersion=
 AutoIncBuildNrOnRebuild=0
 AutoIncBuildNrOnCompile=0
-UnitCount=21
+UnitCount=20
 
 [Profile1]
 ProfileName=MingW gcc
@@ -255,7 +255,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit18]
-FileName=AnimationDlg.h
+FileName=SettingsFrm.cpp
 CompileCpp=1
 Folder=SOR
 Compile=1
@@ -265,7 +265,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit19]
-FileName=AnimationDlg.cpp
+FileName=SettingsFrm.h
 CompileCpp=1
 Folder=SOR
 Compile=1
@@ -275,20 +275,10 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit20]
-FileName=AnimationDlg.wxform
+FileName=SettingsFrm.wxform
 Folder=SOR
 Compile=0
 Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit21]
-FileName=Printout.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
