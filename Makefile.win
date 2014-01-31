@@ -1,14 +1,14 @@
 # Project: SOR
 # Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 31/01/14 02:56
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 31/01/14 11:55
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe
 CC        = gcc.exe
 WINDRES   = "windres.exe"
-OBJ       = Objects/MingW/SORApp.o Objects/MingW/SOR.o Objects/MingW/Chain.o Objects/MingW/Curve.o Objects/MingW/Line.o Objects/MingW/Shape.o Objects/MingW/vecmat.o Objects/MingW/SOR_private.res
-LINKOBJ   = "Objects/MingW/SORApp.o" "Objects/MingW/SOR.o" "Objects/MingW/Chain.o" "Objects/MingW/Curve.o" "Objects/MingW/Line.o" "Objects/MingW/Shape.o" "Objects/MingW/vecmat.o" Objects/MingW/SOR_private.res
+OBJ       = Objects/MingW/SORApp.o Objects/MingW/SOR.o Objects/MingW/Chain.o Objects/MingW/Curve.o Objects/MingW/Line.o Objects/MingW/Shape.o Objects/MingW/vecmat.o Objects/MingW/AnimationDlg.o Objects/MingW/SOR_private.res
+LINKOBJ   = "Objects/MingW/SORApp.o" "Objects/MingW/SOR.o" "Objects/MingW/Chain.o" "Objects/MingW/Curve.o" "Objects/MingW/Line.o" "Objects/MingW/Shape.o" "Objects/MingW/vecmat.o" "Objects/MingW/AnimationDlg.o" Objects/MingW/SOR_private.res
 LIBS      = -L"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/lib/wx/gcc_lib" -L"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/lib" -L"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/MinGW32/lib" -mwindows -l$(WXLIBNAME) -l$(WXLIBNAME)_gl -lwxscintilla -lwxtiff -lwxjpeg -lwxpng -lwxzlib -lwxregexu -lwxexpat -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 -lopengl32  
 INCS      = -I"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/MinGW32/include"
 CXXINCS   = -I"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/MinGW32/include" -I"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/" -I"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/include/common" -I"C:/Users/Tadeusz/Desktop/wxDevCppP7-64b/App/devcpp/include"
@@ -36,10 +36,10 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(LINK) $(LINKOBJ) -o "$(BIN)" $(LIBS) 
 
-Objects/MingW/SORApp.o: $(GLOBALDEPS) SORApp.cpp SORApp.h SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h
+Objects/MingW/SORApp.o: $(GLOBALDEPS) SORApp.cpp SORApp.h SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h AnimationDlg.h Printout.h
 	$(CPP) -c SORApp.cpp -o Objects/MingW/SORApp.o $(CXXFLAGS)
 
-Objects/MingW/SOR.o: $(GLOBALDEPS) SOR.cpp SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h
+Objects/MingW/SOR.o: $(GLOBALDEPS) SOR.cpp SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h AnimationDlg.h Printout.h
 	$(CPP) -c SOR.cpp -o Objects/MingW/SOR.o $(CXXFLAGS)
 
 Objects/MingW/Chain.o: $(GLOBALDEPS) Chain.cpp Chain.hpp Shape.hpp
@@ -56,6 +56,9 @@ Objects/MingW/Shape.o: $(GLOBALDEPS) Shape.cpp Shape.hpp
 
 Objects/MingW/vecmat.o: $(GLOBALDEPS) vecmat.cpp vecmat.h
 	$(CPP) -c vecmat.cpp -o Objects/MingW/vecmat.o $(CXXFLAGS)
+
+Objects/MingW/AnimationDlg.o: $(GLOBALDEPS) AnimationDlg.cpp AnimationDlg.h
+	$(CPP) -c AnimationDlg.cpp -o Objects/MingW/AnimationDlg.o $(CXXFLAGS)
 
 Objects/MingW/SOR_private.res: Objects/MingW/SOR_private.rc SORApp.rc 
 	$(WINDRES) --input-format=rc -o Objects/MingW/SOR_private.res $(RCINCS) Objects/MingW/SOR_PR~1.RC -O coff

@@ -26,8 +26,8 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
-#include <wx/colordlg.h>
 #include <wx/filedlg.h>
+#include <wx/colordlg.h>
 #include <wx/menu.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
@@ -48,7 +48,8 @@
 #include "Chain.hpp"
 #include "Line3d.hpp"
 #include "vecmat.h"
-
+#include "AnimationDlg.h"
+#include "Printout.h"
 ////Dialog Style Start
 #undef SOR_STYLE
 #define SOR_STYLE wxCAPTION | wxSYSTEM_MENU | wxMINIMIZE_BOX | wxCLOSE_BOX
@@ -68,10 +69,10 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxFileDialog *ExportToBMPDialog;
 		wxFileDialog *WxSaveFileDialog1;
-		wxColourDialog *WxColourDialog1;
+		wxFileDialog *ExportToBMPDialog;
 		wxFileDialog *WxOpenFileDialog1;
+		wxColourDialog *WxColourDialog1;
 		wxMenuBar *WxMenuBar1;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;
@@ -86,7 +87,7 @@ class SOR : public wxFrame
 		wxStaticBoxSizer *WxStaticBoxSizer1;
 		wxBoxSizer *WxBoxSizer1;
 		////GUI Control Declaration End
-		
+		Animation *a;
 	private:
 		//Note: if you receive any error with these enum IDs, then you need to
 		//change your old form code that are based on the #define control IDs.
@@ -98,6 +99,7 @@ class SOR : public wxFrame
 			ID_MNU_PLIK_1027 = 1027,
 			ID_MNU_NOWY_1040 = 1040,
 			ID_MNU_WCZYTAJ_1042 = 1042,
+			ID_MNU_DRUKUJ_1056 = 1056,
 			ID_MNU_ZAPISZFIGUR__1043 = 1043,
 			ID_MNU_WYEKSPORTUJDOPNG_1044 = 1044,
 			ID_MNU_WYJ_CIE_1046 = 1046,
@@ -106,6 +108,7 @@ class SOR : public wxFrame
 			ID_MNU_ZAMYKAJKRZYWE_1038 = 1038,
 			ID_MNU_PRZYCI_GAJDOPUNKTU_1039 = 1039,
 			ID_MNU_PERSPEKTYWA_1053 = 1053,
+			ID_MNU_P__OBR_T_1055 = 1055,
 			ID_MNU_ANIMACJA_1035 = 1035,
 			ID_MNU_POKA__1054 = 1054,
 			ID_MNU_POMOC_1036 = 1036,
@@ -150,7 +153,8 @@ class SOR : public wxFrame
             bool showPoints;    ///\ Czy punkty powinny byc widoczne na wykresie 2d
             bool closeChain;    ///\ Czy domykac krzywe lamane
             bool stitchPoint;   ///\ Czy dociagac aktualnie rysowana linie do punktu poczatkowego
-            bool perspective;    ///\ Czy wyswietlac normalnie czy z perspektywa
+            bool perspective;   ///\ Czy wyswietlac normalnie czy z perspektywa
+            bool half;          ///\ Czy wykonywaæ tylko pó³ obrotu
         } Config;
 		
 		/**
@@ -274,6 +278,9 @@ class SOR : public wxFrame
 		void loadFileClick(wxCommandEvent& event);
 		void SetPerspective(wxCommandEvent& event);
 		void Animate(wxCommandEvent& event);
+		void drawOn(wxBufferedDC& dc, int w, int h, int rx, int ry, int rz);
+		void halfRotate(wxCommandEvent& event);
+		void print(wxCommandEvent& event);
 };
 
 #endif

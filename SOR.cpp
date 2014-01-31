@@ -19,6 +19,7 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_CLOSE(SOR::OnClose)
 	EVT_MENU(ID_MNU_NOWY_1040, SOR::createNewGraph)
 	EVT_MENU(ID_MNU_WCZYTAJ_1042, SOR::loadFileClick)
+	EVT_MENU(ID_MNU_DRUKUJ_1056, SOR::print)
 	EVT_MENU(ID_MNU_ZAPISZFIGUR__1043, SOR::saveFileClick)
 	EVT_MENU(ID_MNU_WYEKSPORTUJDOPNG_1044, SOR::exportToBMP)
 	EVT_MENU(ID_MNU_WYJ_CIE_1046, SOR::closeApp)
@@ -26,6 +27,7 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_MENU(ID_MNU_ZAMYKAJKRZYWE_1038, SOR::toggleClosing)
 	EVT_MENU(ID_MNU_PRZYCI_GAJDOPUNKTU_1039, SOR::toggleStitch)
 	EVT_MENU(ID_MNU_PERSPEKTYWA_1053, SOR::SetPerspective)
+	EVT_MENU(ID_MNU_P__OBR_T_1055, SOR::halfRotate)
 	EVT_MENU(ID_MNU_POKA__1054, SOR::Animate)
 	EVT_MENU(ID_WXTOOLBUTTON5,SOR::changeCurrentColor)
 	EVT_MENU(ID_WXTOOLBUTTON3,SOR::changeModeToCurve)
@@ -68,7 +70,7 @@ void SOR::CreateGUIControls()
 
 	wxStaticBox* WxStaticBoxSizer1_StaticBoxObj = new wxStaticBox(this, wxID_ANY, _("Figura 2D"));
 	WxStaticBoxSizer1 = new wxStaticBoxSizer(WxStaticBoxSizer1_StaticBoxObj, wxVERTICAL);
-	WxBoxSizer1->Add(WxStaticBoxSizer1, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxALL, 5);
+	WxBoxSizer1->Add(WxStaticBoxSizer1, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxEXPAND | wxALL, 5);
 
 	Graph2d = new wxPanel(this, ID_GRAPH2D, wxPoint(10, 20), wxSize(345, 347));
 	Graph2d->SetBackgroundColour(wxColour(_("WHITE")));
@@ -79,14 +81,14 @@ void SOR::CreateGUIControls()
 
 	wxStaticBox* WxStaticBoxSizer2_StaticBoxObj = new wxStaticBox(this, wxID_ANY, _("Bry³a obrotowa"));
 	WxStaticBoxSizer2 = new wxStaticBoxSizer(WxStaticBoxSizer2_StaticBoxObj, wxVERTICAL);
-	WxBoxSizer1->Add(WxStaticBoxSizer2, 0, wxALIGN_TOP | wxALL, 5);
+	WxBoxSizer1->Add(WxStaticBoxSizer2, 0, wxALIGN_RIGHT | wxALIGN_TOP | wxEXPAND | wxALL, 5);
 
 	Graph3d = new wxPanel(this, ID_GRAPH3D, wxPoint(10, 20), wxSize(345, 347));
 	Graph3d->SetBackgroundColour(wxColour(_("WHITE")));
 	WxStaticBoxSizer2->Add(Graph3d, 0, wxALIGN_CENTER | wxALL, 5);
 
 	WxBoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	WxStaticBoxSizer2->Add(WxBoxSizer2, 0, wxALIGN_CENTER | wxALL, 5);
+	WxStaticBoxSizer2->Add(WxBoxSizer2, 0, wxALIGN_CENTER | wxEXPAND | wxALL, 5);
 
 	WxScrollBar1 = new wxScrollBar(this, ID_WXSCROLLBAR1, wxPoint(5, 5), wxSize(105, 15), wxSB_HORIZONTAL, wxDefaultValidator, _("WxScrollBar1"));
 	WxScrollBar1->Enable(false);
@@ -129,6 +131,7 @@ void SOR::CreateGUIControls()
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_NOWY_1040, _("Nowy"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->AppendSeparator();
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WCZYTAJ_1042, _("Wczytaj"), _(""), wxITEM_NORMAL);
+	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_DRUKUJ_1056, _("Drukuj"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_ZAPISZFIGUR__1043, _("Zapisz figurê"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->Append(ID_MNU_WYEKSPORTUJDOPNG_1044, _("Wyeksportuj do BMP"), _(""), wxITEM_NORMAL);
 	ID_MNU_PLIK_1027_Mnu_Obj->AppendSeparator();
@@ -145,24 +148,25 @@ void SOR::CreateGUIControls()
 	ID_MNU_EDYCJA_1034_Mnu_Obj->AppendSeparator();
 	ID_MNU_EDYCJA_1034_Mnu_Obj->Append(ID_MNU_PERSPEKTYWA_1053, _("Perspektywa"), _(""), wxITEM_CHECK);
 	ID_MNU_EDYCJA_1034_Mnu_Obj->Check(ID_MNU_PERSPEKTYWA_1053,false);
+	ID_MNU_EDYCJA_1034_Mnu_Obj->Append(ID_MNU_P__OBR_T_1055, _("Pó³obrót"), _(""), wxITEM_CHECK);
+	ID_MNU_EDYCJA_1034_Mnu_Obj->Check(ID_MNU_P__OBR_T_1055,false);
 	WxMenuBar1->Append(ID_MNU_EDYCJA_1034_Mnu_Obj, _("Edycja"));
 	
 	wxMenu *ID_MNU_ANIMACJA_1035_Mnu_Obj = new wxMenu();
-	ID_MNU_ANIMACJA_1035_Mnu_Obj->Append(ID_MNU_POKA__1054, _("Poka¿"), _(""), wxITEM_CHECK);
-	ID_MNU_ANIMACJA_1035_Mnu_Obj->Check(ID_MNU_POKA__1054,false);
+	ID_MNU_ANIMACJA_1035_Mnu_Obj->Append(ID_MNU_POKA__1054, _("Poka¿"), _(""), wxITEM_NORMAL);
 	WxMenuBar1->Append(ID_MNU_ANIMACJA_1035_Mnu_Obj, _("Animacja"));
 	
 	wxMenu *ID_MNU_POMOC_1036_Mnu_Obj = new wxMenu();
 	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
 
-	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
-
 	WxColourDialog1 =  new wxColourDialog(this);
 
-	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	WxOpenFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_OPEN);
 
 	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
+
+	WxSaveFileDialog1 =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
@@ -327,12 +331,12 @@ void SOR::prepare3dGraph() {
             
             for(int k = 0; k < K; ++k) {
                 
-                v1.set(points[j].x + k * dx, points[j].y + k * dy, 0);
-                v2.set(points[j].x + (k + 1) * dx, points[j].y + (k + 1) * dy, 0);
+                v1.set(points[j].x + k * dx, -(points[j].y + k * dy), 0);
+                v2.set(points[j].x + (k + 1) * dx, -(points[j].y + (k + 1) * dy), 0);
             
                 M = rotateY(5);
-            
-                for(int l = 0; l < 72; ++l) {
+                int num = 72 - (36*_config.half);
+                for(int l = 0; l < num; ++l) {
                     v3 = M * v1;
                     v4 = M * v2;
     
@@ -398,38 +402,8 @@ void SOR::draw3dGraph() {
     double rX = WxScrollBar1->GetThumbPosition();
     double rY = WxScrollBar2->GetThumbPosition();
     double rZ = WxScrollBar3->GetThumbPosition(); 
+    drawOn(dc,w,h,rX,rY,rZ);
     
-    prepare3dGraph();
-    
-    Matrix M = translation(0, 0, 0) * rotateX(rX) * rotateY(rY) * rotateZ(rZ);
-    for(int i = 0; i < _lines3d.size(); ++i) {
-        v1.set(_lines3d[i].x0, _lines3d[i].y0, _lines3d[i].z0);    
-        v2.set(_lines3d[i].x1, _lines3d[i].y1, _lines3d[i].z1);
-        
-        v1 = M * v1;
-        v2 = M * v2;
-        _lines3d[i].x0 = v1.getX();
-        _lines3d[i].x1 = v2.getX();
-        _lines3d[i].y0 = v1.getY();
-        _lines3d[i].y1 = v2.getY();
-        _lines3d[i].z0 = v1.getZ();
-        _lines3d[i].z1 = v2.getZ();
-    }
-    std::sort(_lines3d.begin(), _lines3d.end(),lines_comp);
-    for(int i = 0; i < _lines3d.size(); ++i){
-        
-        v1.set(_lines3d[i].x0, _lines3d[i].y0, _lines3d[i].z0);    
-        v2.set(_lines3d[i].x1, _lines3d[i].y1, _lines3d[i].z1);
-                if (_config.perspective)
-                {
-                    v1 = translation(0,0,0.5) * v1;
-                    v2 = translation(0,0,0.5) * v2;
-                    v1.focus(2.0);
-                    v2.focus(2.0);   
-                }
-        dc.SetPen(_lines3d[i].color);
-        dc.DrawLine(v1.getX() * w/2, -v1.getY() * h/2, v2.getX() * w/2, -v2.getY() * h/2);
-    }   
 
 }
 
@@ -919,9 +893,6 @@ void SOR::SetPerspective(wxCommandEvent& event)
  */
 void SOR::Animate(wxCommandEvent& event)
 {
-	WxScrollBar1->SetThumbPosition(0);
-    WxScrollBar2->SetThumbPosition(0);
-    WxScrollBar3->SetThumbPosition(0);
     WxScrollBar1->Disable();
     WxScrollBar2->Disable();
     WxScrollBar3->Disable();
@@ -932,11 +903,76 @@ void SOR::Animate(wxCommandEvent& event)
         WxScrollBar3->SetThumbPosition(i);
         draw3dGraph();
         wxThread::This()->Sleep(1);
-        if (!event.IsChecked()) break;
+        //if (!event.IsChecked()) break;
     }
     WxScrollBar1->Enable();
     WxScrollBar2->Enable();
     WxScrollBar3->Enable();
+}
+void SOR::drawOn(wxBufferedDC &dc, int w, int h, int rX,int rY,int rZ)
+{
+
+    Vector v1, v2;
+
     
+    prepare3dGraph();
     
+    Matrix M = translation(0, 0, 0) * rotateX(rX) * rotateY(rY) * rotateZ(rZ);
+    for(int i = 0; i < _lines3d.size(); ++i) {
+        v1.set(_lines3d[i].x0, _lines3d[i].y0, _lines3d[i].z0);    
+        v2.set(_lines3d[i].x1, _lines3d[i].y1, _lines3d[i].z1);
+        
+        v1 = M * v1;
+        v2 = M * v2;
+        _lines3d[i].x0 = v1.getX();
+        _lines3d[i].x1 = v2.getX();
+        _lines3d[i].y0 = v1.getY();
+        _lines3d[i].y1 = v2.getY();
+        _lines3d[i].z0 = v1.getZ();
+        _lines3d[i].z1 = v2.getZ();
+    }
+    std::sort(_lines3d.begin(), _lines3d.end(),lines_comp);
+    for(int i = 0; i < _lines3d.size(); ++i){
+        
+        v1.set(_lines3d[i].x0, _lines3d[i].y0, _lines3d[i].z0);    
+        v2.set(_lines3d[i].x1, _lines3d[i].y1, _lines3d[i].z1);
+                if (_config.perspective)
+                {
+                    v1 = translation(0,0,0.5) * v1;
+                    v2 = translation(0,0,0.5) * v2;
+                    v1.focus(2.0);
+                    v2.focus(2.0);   
+                }
+        dc.SetPen(_lines3d[i].color);
+        dc.DrawLine(v1.getX() * w/2, -v1.getY() * h/2, v2.getX() * w/2, -v2.getY() * h/2);
+    }
+}
+
+/*
+ * halfRotate
+ */
+void SOR::halfRotate(wxCommandEvent& event)
+{
+	_config.half = event.IsChecked();
+	draw3dGraph();
+}
+
+/*
+ * print
+ */
+void SOR::print(wxCommandEvent& event)
+{
+    // save the display before it is clobbered by the print preview
+
+    static wxMemoryDC memDC;
+    static wxBitmap bitmap(Graph3d->GetSize().GetWidth() , Graph3d->GetSize().GetHeight());
+    memDC.SelectObject( bitmap );
+    wxClientDC frameDC(Graph3d );
+    memDC.Blit(0,0,Graph3d->GetSize().GetWidth() , Graph3d->GetSize().GetHeight(),&frameDC, 0, 0 );
+    wxPrintPreview *preview = new wxPrintPreview(new Printout(memDC), new Printout(memDC));
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Drukuj Bry³ê",  wxPoint(600, 100),  wxSize(500, 500));
+    frame->Centre(wxBOTH);
+    frame->Initialize();
+    frame->Show(true);
+
 }
