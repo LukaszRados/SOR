@@ -48,7 +48,6 @@
 #include "Chain.hpp"
 #include "Line3d.hpp"
 #include "vecmat.h"
-#include "AnimationDlg.h"
 #include "Printout.h"
 ////Dialog Style Start
 #undef SOR_STYLE
@@ -87,7 +86,6 @@ class SOR : public wxFrame
 		wxStaticBoxSizer *WxStaticBoxSizer1;
 		wxBoxSizer *WxBoxSizer1;
 		////GUI Control Declaration End
-		Animation *a;
 	private:
 		//Note: if you receive any error with these enum IDs, then you need to
 		//change your old form code that are based on the #define control IDs.
