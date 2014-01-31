@@ -31,7 +31,7 @@ BEGIN_EVENT_TABLE(SOR,wxFrame)
 	EVT_MENU(ID_MNU_P__OBR_T_1055, SOR::halfRotate)
 	EVT_MENU(ID_MNU_UTW_RZANIMACJ__1059, SOR::createAnimation)
 	EVT_MENU(ID_MNU_USTAWIENIA_1062, SOR::Animate)
-	EVT_MENU(ID_MNU_POMOC_1036, SOR::about)
+	EVT_MENU(ID_MNU_OPROGRAMIE_1063, SOR::about)
 	EVT_MENU(ID_WXTOOLBUTTON5,SOR::changeCurrentColor)
 	EVT_MENU(ID_WXTOOLBUTTON3,SOR::changeModeToCurve)
 	EVT_MENU(ID_WXTOOLBUTTON2,SOR::changeModeToChain)
@@ -163,7 +163,8 @@ void SOR::CreateGUIControls()
 	WxMenuBar1->Append(ID_MNU_ANIMACJA_1035_Mnu_Obj, _("Animacja"));
 	
 	wxMenu *ID_MNU_POMOC_1036_Mnu_Obj = new wxMenu();
-	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("O programie"));
+	ID_MNU_POMOC_1036_Mnu_Obj->Append(ID_MNU_OPROGRAMIE_1063, _("O programie"), _(""), wxITEM_NORMAL);
+	WxMenuBar1->Append(ID_MNU_POMOC_1036_Mnu_Obj, _("Pomoc"));
 	SetMenuBar(WxMenuBar1);
 
 	ExportToBMPDialog =  new wxFileDialog(this, _("Choose a file"), _(""), _(""), _("*.bmp"), wxFD_SAVE);
@@ -176,6 +177,8 @@ void SOR::CreateGUIControls()
 	WxTimer1->SetOwner(this, ID_WXTIMER1);
 
 	WxColourDialog1 =  new wxColourDialog(this);
+
+	aboutApp =  new wxMessageDialog(this, _(""), _("O programie"), wxOK | wxICON_INFORMATION);
 
 	SetStatusBar(WxStatusBar1);
 	WxToolBar1->Realize();
@@ -200,6 +203,8 @@ void SOR::CreateGUIControls()
 	_lastAddedPoint = wxRealPoint(-2, -2);
 	_currentColor = RGB(0, 0, 0);
 	_mode = NONE;
+	
+	SetBackgroundColour(*wxWHITE);
 	
 	Graph2d->Connect(wxID_ANY,
                      wxEVT_LEFT_DOWN,
@@ -1033,5 +1038,6 @@ void SOR::createAnimation(wxCommandEvent& event) {
 }
 
 void SOR::about(wxCommandEvent& event) {
-	
+    aboutApp->SetMessage("Autorzy programu:\n- Pawe³ Noga\n- Tadeusz Raczek\n- £ukasz Rados");
+	aboutApp->ShowModal();
 }

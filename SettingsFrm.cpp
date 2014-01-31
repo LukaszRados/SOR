@@ -146,6 +146,8 @@ void SettingsFrame::CreateGUIControls()
 	WxScrollBar5->SetScrollbar(0, 1, 361, 1, true);
 	WxScrollBar6->Enable(true);
 	WxScrollBar6->SetScrollbar(0, 1, 361, 1, true);
+	
+	SetBackgroundColour(*wxWHITE);
 }
 
 void SettingsFrame::OnClose(wxCloseEvent& event) {

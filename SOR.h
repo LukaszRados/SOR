@@ -26,6 +26,7 @@
 //Header Include Start and Header Include End.
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
+#include <wx/msgdlg.h>
 #include <wx/colordlg.h>
 #include <wx/timer.h>
 #include <wx/filedlg.h>
@@ -71,6 +72,7 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
+		wxMessageDialog *aboutApp;
 		wxColourDialog *WxColourDialog1;
 		wxTimer *WxTimer1;
 		wxFileDialog *WxSaveFileDialog1;
@@ -116,6 +118,7 @@ class SOR : public wxFrame
 			ID_MNU_UTW_RZANIMACJ__1059 = 1059,
 			ID_MNU_USTAWIENIA_1062 = 1062,
 			ID_MNU_POMOC_1036 = 1036,
+			ID_MNU_OPROGRAMIE_1063 = 1063,
 			
 			ID_WXTOOLBUTTON5 = 1033,
 			ID_WXTOOLBUTTON3 = 1031,
@@ -301,6 +304,7 @@ class SOR : public wxFrame
 		void WxTimer1Timer(wxTimerEvent& event);
 		void SORSize(wxSizeEvent& event);
 		void createAnimation(wxCommandEvent& event);
+		void about(wxCommandEvent& event);
 };
 
 #endif

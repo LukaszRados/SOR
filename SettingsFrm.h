@@ -110,11 +110,25 @@ class SettingsFrame : public wxFrame
 		void OnClose(wxCloseEvent& event);
 		void CreateGUIControls();
 
+        /**
+         *  Wskaznik do modyfikowanych parametrow.
+         */
         Line3d *_org;
+        
+        /**
+         *  Tymczasowe wartosci parametrow - przed zapisaniem.
+         */
 		Line3d _values;
+		
+		/**
+		 *  Metoda aktualizujaca tymczasowe wartosci parametrow po przesunieciu suwakow.
+		 */
 		void updateValues(wxScrollEvent& event);
 		
 	public:
+        /**
+         *  Metoda ustawiajaca wskaznik do modyfikowanych wartosci.
+         */
         void setValues(Line3d *org);
 };
 
