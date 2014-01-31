@@ -309,54 +309,71 @@ void SOR::prepare3dGraph() {
     for(int i = 0; i < _shapes.size(); ++i) {
         std::vector<wxRealPoint> points = _shapes[i]->getPoints();
         for(int j = 0; j < points.size() - 1; ++j) {
-            v1.set(points[j].x, points[j].y, 0);
-            v2.set(points[j + 1].x, points[j + 1].y, 0);
+            int K = 1;
             
-            M = rotateY(5);
+            if(Shape::distance(points[j], points[j + 1]) > 0.25) {
+                K = 3;    
+            }
+            else {
+                K = 1;    
+            }
+            double dx, dy;
+            dx = (points[j + 1].x - points[j].x) / (double)K;
+            dy = (points[j + 1].y - points[j].y) / (double)K;
             
-            for(int k = 0; k < 72; ++k) {
-                v3 = M * v1;
-                v4 = M * v2;
-
-                Line3d line1 = {
-                    v1.getX(),
-                    v1.getY(),
-                    v1.getZ(),
-                    v3.getX(),
-                    v3.getY(),
-                    v3.getZ(),
-                    _shapes[i]->getColor()    
-                };
+            for(int k = 0; k < K; ++k) {
                 
-                _lines3d.push_back(line1);
+                v1.set(points[j].x + k * dx, points[j].y + k * dy, 0);
+                v2.set(points[j].x + (k + 1) * dx, points[j].y + (k + 1) * dy, 0);
+            
+                M = rotateY(5);
+            
+                for(int l = 0; l < 72; ++l) {
+                    v3 = M * v1;
+                    v4 = M * v2;
+    
+                    Line3d line1 = {
+                        v1.getX(),
+                        v1.getY(),
+                        v1.getZ(),
+                        v3.getX(),
+                        v3.getY(),
+                        v3.getZ(),
+                        _shapes[i]->getColor()    
+                    };
                 
-                Line3d line2 = {
-                    v4.getX(),
-                    v4.getY(),
-                    v4.getZ(),
-                    v2.getX(),
-                    v2.getY(),
-                    v2.getZ(),
-                    _shapes[i]->getColor()    
-                };
+                    _lines3d.push_back(line1);
                 
-                _lines3d.push_back(line2);
+                    Line3d line2 = {
+                        v4.getX(),
+                        v4.getY(),
+                        v4.getZ(),
+                        v2.getX(),
+                        v2.getY(),
+                        v2.getZ(),
+                        _shapes[i]->getColor()    
+                    };
                 
-                Line3d line3 = {
-                    v3.getX(),
-                    v3.getY(),
-                    v3.getZ(),
-                    v4.getX(),
-                    v4.getY(),
-                    v4.getZ(),
-                    _shapes[i]->getColor()    
-                };
+                    _lines3d.push_back(line2);
                 
-                _lines3d.push_back(line3);
+                    Line3d line3 = {
+                        v3.getX(),
+                        v3.getY(),
+                        v3.getZ(),
+                        v4.getX(),
+                        v4.getY(),
+                        v4.getZ(),
+                        _shapes[i]->getColor()    
+                    };
                 
-                v1 = v3;
-                v2 = v4;
-            }    
+                    _lines3d.push_back(line3);
+                
+                    v1 = v3;
+                    v2 = v4;
+                }    
+                
+                
+            } /// end of for k[0;5]
         }
     }
 }
