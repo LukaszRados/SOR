@@ -27,8 +27,8 @@
 //wxDev-C++ designer will remove them. Add custom headers after the block.
 ////Header Include Start
 #include <wx/colordlg.h>
-#include <wx/menu.h>
 #include <wx/filedlg.h>
+#include <wx/menu.h>
 #include <wx/toolbar.h>
 #include <wx/statusbr.h>
 #include <wx/scrolbar.h>
@@ -68,11 +68,11 @@ class SOR : public wxFrame
 		//GUI Control Declaration Start and GUI Control Declaration End.
 		//wxDev-C++ will remove them. Add custom code after the block.
 		////GUI Control Declaration Start
-		wxColourDialog *WxColourDialog1;
-		wxMenuBar *WxMenuBar1;
 		wxFileDialog *ExportToBMPDialog;
-		wxFileDialog *WxOpenFileDialog1;
 		wxFileDialog *WxSaveFileDialog1;
+		wxColourDialog *WxColourDialog1;
+		wxFileDialog *WxOpenFileDialog1;
+		wxMenuBar *WxMenuBar1;
 		wxToolBar *WxToolBar1;
 		wxStatusBar *WxStatusBar1;
 		wxScrollBar *WxScrollBar3;
@@ -107,6 +107,7 @@ class SOR : public wxFrame
 			ID_MNU_PRZYCI_GAJDOPUNKTU_1039 = 1039,
 			ID_MNU_PERSPEKTYWA_1053 = 1053,
 			ID_MNU_ANIMACJA_1035 = 1035,
+			ID_MNU_POKA__1054 = 1054,
 			ID_MNU_POMOC_1036 = 1036,
 			
 			ID_WXTOOLBUTTON5 = 1033,
@@ -272,6 +273,7 @@ class SOR : public wxFrame
 		void saveFileClick(wxCommandEvent& event);
 		void loadFileClick(wxCommandEvent& event);
 		void SetPerspective(wxCommandEvent& event);
+		void Animate(wxCommandEvent& event);
 };
 
 #endif
