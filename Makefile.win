@@ -1,7 +1,7 @@
 # Project: SOR
 # Compiler: Default GCC compiler
 # Compiler Type: MingW 3
-# Makefile created by wxDev-C++ IDE 7.4.2.569 on 31-01-14 17:34
+# Makefile created by wxDev-C++ IDE 7.4.2.569 on 31-01-14 17:48
 
 WXLIBNAME = wxmsw29u
 CPP       = g++.exe
@@ -39,7 +39,7 @@ $(BIN): $(OBJ)
 Objects/MingW/SORApp.o: $(GLOBALDEPS) SORApp.cpp SORApp.h SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h Printout.h SettingsFrm.h Line3d.hpp
 	$(CPP) -c SORApp.cpp -o Objects/MingW/SORApp.o $(CXXFLAGS)
 
-Objects/MingW/SOR.o: $(GLOBALDEPS) SOR.cpp SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h Printout.h SettingsFrm.h Line3d.hpp
+Objects/MingW/SOR.o: $(GLOBALDEPS) SOR.cpp SOR.h Shape.hpp Line.hpp Shape.hpp Curve.hpp Shape.hpp Chain.hpp Shape.hpp Line3d.hpp vecmat.h Printout.h SettingsFrm.h Line3d.hpp Images/SOR_WxToolButton5_XPM.xpm Images/SOR_WxToolButton3_XPM.xpm Images/SOR_WxToolButton2_XPM.xpm Images/SOR_WxToolButton1_XPM.xpm Images/SOR_WxToolButton7_XPM.xpm
 	$(CPP) -c SOR.cpp -o Objects/MingW/SOR.o $(CXXFLAGS)
 
 Objects/MingW/Chain.o: $(GLOBALDEPS) Chain.cpp Chain.hpp Shape.hpp
