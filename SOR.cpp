@@ -1038,6 +1038,12 @@ void SOR::WxTimer1Timer(wxTimerEvent& event) {
 
 void SOR::createAnimation(wxCommandEvent& event) {
 	_config.animation = event.IsChecked();
+	if(_config.animation) {
+        WxButton1->SetLabel("Animuj");
+    }
+    else {
+        WxButton1->SetLabel("Rysuj");
+    }
 }
 
 /******************************************************************************/

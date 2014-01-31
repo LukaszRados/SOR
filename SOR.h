@@ -2,7 +2,6 @@
 ///
 /// @file      SOR.h
 /// @author    Pawel Noga, Tadeusz Raczek, Lukasz Rados
-/// Created:   2014-01-11 22:23:42
 /// @section   DESCRIPTION
 ///            SOR class declaration
 ///

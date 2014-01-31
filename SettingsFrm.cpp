@@ -1,8 +1,6 @@
 ///-----------------------------------------------------------------
 ///
 /// @file      SettingsFrm.cpp
-/// @author    Lukasz
-/// Created:   2014-01-31 14:14:59
 /// @section   DESCRIPTION
 ///            SettingsFrame class implementation
 ///
